@@ -41,9 +41,9 @@ Avoid by default:
 - full OCR unless normal text extraction fails or the PDF is scanned,
 - saving full raw extracted paper text unless it is needed for debugging or reuse,
 - installing new dependencies when an existing tool can complete the task,
-- launching desktop automation just to render previews when the installed `Presentations` workflow provides a preview path,
+- launching desktop automation just to render previews when the selected workflow provides a preview path,
 - generating long markdown scripts when the user only needs a deck,
-- rendering every slide through a separate renderer when the installed `Presentations` workflow provides the required rendered-slide review.
+- rendering every slide through a separate renderer when the selected workflow provides the required rendered-slide review.
 
 ## Accepted inputs
 

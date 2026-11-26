@@ -45,10 +45,10 @@ Read the file mapped for the detected `source_format`. Do **not** read every fra
 
 Apply the loaded fragments in this priority order:
 
-1. Core principles (`core/principles.md`) — bilingual reader by default, translate for meaning, never degrade to a summary, copyright caution.
+1. Core principles (`static/core/principles.md`) — bilingual reader by default, translate for meaning, never degrade to a summary, copyright caution.
 2. Source-format fragment — how to extract text, figures, and tables for this input.
-3. Reading workflow (`core/workflow.md`) — the six-step source-map-first process.
-4. Output contract (`core/output-contract.md`) — required files and the pre-response verification checklist.
+3. Reading workflow (`static/core/workflow.md`) — the six-step source-map-first process.
+4. Output contract (`static/core/output-contract.md`) — required files and the pre-response verification checklist.
 
 Build the Terminology Ledger as you translate (`../nature-shared/core/terminology-ledger.md`); it becomes the `paper.md` recurring-term table and the `source_map.json` glossary.
 

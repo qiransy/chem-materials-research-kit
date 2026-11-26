@@ -17,7 +17,7 @@ Generate a minimal but complete output package when a deck is requested. For rev
 The main deliverable: a complete Chinese PPTX deck with figures, captions, takeaways, source labels, and speaker notes.
 
 ### 2. `output/qa_report.md`
-When a QA note is useful or requested, record PPTX creation status; slide count; figures inserted; missing or placeholder figures; figure-crop QA results; alignment checks; self-review defects found and corrected; overflow checks; verification method; and material limitations. Follow the rendered review/finalization path in the installed `Presentations` skill. The local XML audit is supplementary.
+When a QA note is useful or requested, record PPTX creation status; slide count; figures inserted; missing or placeholder figures; figure-crop QA results; alignment checks; self-review defects found and corrected; overflow checks; verification method; and material limitations. Follow the available backend's rendered review and finalization path. The local XML audit is supplementary.
 
 ### 3. `output/assets/figures/`
 Extracted or cropped figure assets used in the deck.
@@ -33,7 +33,7 @@ Create these only when useful for review, debugging, or user-requested traceabil
 - `output/ppt_outline_cn.md` — Chinese outline: paper information, paper type, central argument, slide structure, slide purpose.
 - `output/figure_plan.md` — figure selection plan: figure / panel, what it shows, why it matters, recommended slide, Chinese caption, interpretation.
 - `output/ppt_script_cn_with_figures.md` — slide-by-slide script (Purpose / Layout / On-slide bullets / Figure-Table / Chinese caption / Core takeaway / Speaker note per slide).
-- `output/rendered/` — save preview images only when useful or requested; inspect the rendered deck through the `Presentations` workflow when available.
+- `output/rendered/` — save preview images when useful or requested; inspect the rendered deck using the selected backend's preview path when available.
 
 ## Quality rules
 
@@ -52,7 +52,7 @@ Create these only when useful for review, debugging, or user-requested traceabil
 - Ensure the visual rhythm does not feel like a repeated AI template; vary composition based on evidence role and figure geometry.
 - Ensure the deck is not visually underfilled: empty regions should be intentional whitespace, not leftover template space.
 - Run at least one self-review and corrective revision pass; do not deliver a first draft with known high-severity defects.
-- Use the installed `Presentations` skill for PPTX authoring, rendered review, and finalization. The bundled XML audit may provide an additional structural check; it does not replace visual review.
+- Use the selected tool for PPTX authoring, rendered review, and finalization. Record whether checks were structural or visual.
 - Document uncertainty and missing source material clearly.
 
 ## Fallback rules
