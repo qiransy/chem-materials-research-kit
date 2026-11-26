@@ -39,7 +39,7 @@ Do **not** read every fragment in `static/`. Load only what step 2 selected.
 
 ### 4. Polish using the loaded material
 
-Apply the loaded fragments in this priority order, matching the `paper type -> section job -> paragraph logic -> claim/evidence/boundary -> sentence polish` rule from `core/failure-modes.md`:
+Apply the loaded fragments in this priority order, matching the `paper type -> section job -> paragraph logic -> claim/evidence/boundary -> sentence polish` rule from `static/core/failure-modes.md`:
 
 1. Paper-type playbook (architecture, writing order).
 2. Section-specific job and failure modes.

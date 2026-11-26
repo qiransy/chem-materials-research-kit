@@ -34,7 +34,7 @@ Respect the on-slide text budget: write for the slide, not the manuscript; most 
 
 ## Step 7. Build the actual PPTX deck
 
-Create and edit the real `.pptx` through the installed `Presentations` skill, following its toolchain and any user-provided template or style. Use 16:9 by default when no format is specified, Chinese titles/bullets/captions/notes, source labels on figure slides, content-sized text boxes with conservative margins, and consistent typography. Let slide geometry follow the figure rather than forcing the figure into a fixed 1:1 template. Align titles, figure edges, source labels, caption bands, and bottom notes to a small set of slide guides. Prefer shorter text, larger boxes, or splitting the slide over shrinking text; never deliver expected clipping. Full composition and text-fitting guidance is in `references/design-and-layout.md`.
+Create or edit the `.pptx` using the [selected authoring tool](toolchain.md) and any user-provided template. If the tool is unavailable, prepare the slide-by-slide script. Use 16:9 by default when no format is specified, Chinese titles/bullets/captions/notes, source labels on figure slides, content-sized text boxes with conservative margins, and consistent typography. Let slide geometry follow the figure rather than forcing the figure into a fixed 1:1 template. Align titles, figure edges, source labels, caption bands, and bottom notes to a small set of slide guides. Prefer shorter text, larger boxes, or splitting the slide over shrinking text; never deliver expected clipping. Full composition and text-fitting guidance is in `references/design-and-layout.md`.
 
 ## Step 8. Self-review and corrective revision loop
 

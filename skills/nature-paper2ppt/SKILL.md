@@ -3,8 +3,8 @@ name: nature-paper2ppt
 description: >-
   Plan a Chinese academic paper presentation from a source paper: classify the
   contribution, build an evidence-led slide story, select figures, and draft
-  slide text and speaker notes. For actual PPTX authoring and editing, use the
-  installed Presentations skill and its supported toolchain; this skill supplies
+  slide text and speaker notes. For actual PPTX authoring and editing, use an
+  available presentation tool; this skill supplies
   the paper-specific narrative and figure guidance. Use for journal clubs,
   group meetings, seminars, paper sharing, conferences, and defenses.
 ---
@@ -48,15 +48,15 @@ Read the file mapped for the detected `paper_type`. It gives the presentation ar
 
 Apply the loaded fragments in this priority order:
 
-1. Core principles (`core/principles.md`) — the argument is the spine; lean operating mode; accepted inputs; Chinese-by-default language rule.
-2. Toolchain policy and fast path (`core/toolchain.md`) — use the installed Presentations workflow, or the explicitly requested PPT Master workflow, for authoring and rendered review.
+1. Core principles (`static/core/principles.md`) — the argument is the spine; lean operating mode; accepted inputs; Chinese-by-default language rule.
+2. Toolchain policy and fast path (`static/core/toolchain.md`) — choose an available authoring and review backend.
 3. Paper-type arc (the loaded `paper_type` fragment) — narrative order and slide structure for this paper.
-4. Workflow (`core/workflow.md`) — run the 9 steps end to end.
-5. Output and quality rules (`core/output-and-quality.md`) — deliverables, quality gates, fallbacks.
+4. Workflow (`static/core/workflow.md`) — run the 9 steps end to end.
+5. Output and quality rules (`static/core/output-and-quality.md`) — deliverables, quality gates, fallbacks.
 
 Build the Terminology Ledger (`../nature-shared/core/terminology-ledger.md`) while reading the source, so model names, gene/protein names, datasets, metrics, and abbreviations stay identical across every slide and speaker note.
 
-When a deck is requested, the end product is a real `.pptx`, not only an outline or script. Do not fabricate results, numbers, or figure details.
+When a deck is requested and the current environment supports authoring, deliver a real `.pptx`. Otherwise deliver a slide-by-slide script and identify what is needed to render it. Ground results, numbers, and figure details in the source.
 
 ### 5. Reach for references only when needed
 

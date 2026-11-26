@@ -1,63 +1,36 @@
-# Chemistry & Materials Research Kit (Antigravity Plugin)
+# Chemistry & Materials Research Kit
 
-面向**化学与材料方向**科研新手和研究生的 Antigravity 通用科研技能包（共 **27 个完整可执行技能** + 无个人信息的通用科研原则 + 2 个新手开箱试跑案例，已做脱敏与普适化处理，不含任何个人配置或 API 密钥）。
-
----
-
-## 一、快速安装（30 秒上手）
-
-### 方式 1：直接下载压缩包（推荐新手，不用装 Git）
-1. 打开本仓库右侧的 **[Releases](https://github.com/qiransy/chem-materials-research-kit/releases/latest)**，下载 `chem-materials-research-kit.zip`。
-2. 解压后得到 `chem-materials-research-kit` 文件夹（确保里面直接包含 `plugin.json`、`skills/` 和 `rules/`）。
-3. 将整个文件夹放到你的 Antigravity 全局插件目录：
-   - **Windows**：`C:\Users\<你的用户名>\.gemini\config\plugins\chem-materials-research-kit\`
-   - **macOS / Linux**：`~/.gemini/config/plugins/chem-materials-research-kit/`
-   - *（如果只想在某一个课题文件夹生效，也可以放到该项目的 `.agents/plugins/chem-materials-research-kit/` 目录下）*
-
-### 方式 2：命令行一键克隆（熟悉 Git 的用户）
-```bash
-# macOS / Linux
-git clone https://github.com/qiransy/chem-materials-research-kit.git ~/.gemini/config/plugins/chem-materials-research-kit
-
-# Windows (PowerShell)
-git clone https://github.com/qiransy/chem-materials-research-kit.git "$env:USERPROFILE\.gemini\config\plugins\chem-materials-research-kit"
-```
-
-### 方式 3：在其他 Agent 平台使用（仅复制 `skills/` 里的子文件夹）
-本包内所有技能均遵循开放 `SKILL.md` 目录规范，如需在其他工具中使用，可将 `skills/<skill-name>/` 复制到对应路径：
-
-| 使用环境 | 项目级技能路径 |
-| :--- | :--- |
-| **Antigravity** | `.agents/plugins/chem-materials-research-kit/`（或全局 `~/.gemini/config/plugins/`） |
-| **Codex / Cursor / Gemini CLI** | `.agents/skills/<skill-name>/SKILL.md` |
-| **Claude Code** | `.claude/skills/<skill-name>/SKILL.md` |
-
-放好后开启下一轮对话即可自动加载生效；在 Antigravity 中也可通过 **Plugins / Customizations** 页面随时一键启停。
+面向**化学与材料方向**科研新手和研究生的科研工具包。包含 **27 个 Skill 目录**、[通用科研原则](rules/AGENTS.md) 和两份模拟案例。技能使用开放 [Agent Skills](https://agentskills.io/specification) 格式。
 
 ---
 
-## 二、装完后 30 秒开箱试跑（新手验证）
+## 一、选择你的使用方式
+
+目前提供 **Codex 和 Antigravity** 的[项目级安装说明](INSTALL.md)。两者都从课题目录的 `.agents/skills/` 读取技能文件，可共用一份安装。
+
+其他 Agent 待实测。已安装的 Antigravity 插件仍可通过原有插件入口使用。
+
+---
+
+## 二、用模拟案例试跑
 
 不确定有没有装成功、或者想立刻看看效果？直接打开本包内的模拟案例：
 - **[XRD 物相指认案例](examples/xrd-phase-identification.md)**
 - **[反应动力学案例](examples/reaction-kinetics.md)**
 
-把案例里的 **「输入给 Agent」** 段落复制发给 Antigravity，跑完后对照案例下半部分的 **「检查答案时看这些点」**，即可直观验收 `chemistry-evidence-review` 的证据边界核查效果。
+明确指定 `chemistry-evidence-review`，并提交案例里的 **「输入给 Agent」**。任务完成后，再用案例下半部分的 **「检查答案时看这些点」** 核对证据、结论和建议验证是否对应。
 
 ---
 
-## 三、强烈建议顺手安装的官方科研插件
+## 三、工具和运行条件
 
-本包侧重**证据核查、文献管理、论文读写、审稿修回、数据分析、表征作图与汇报**；建议你在 Antigravity 插件市场（Plugins Manager）中直接搜索并一键安装以下两个官方免费插件，搭配使用效果最佳：
-
-- **`chemistry`**：内置 RDKit、PubChem、ChEMBL、PubMed、OpenAlex、反应/物性/机器学习/分子对接等专业化学数据库与工具。
-- **`scientific-literature`**：内置 arXiv、bioRxiv、Europe PMC、PubMed、OpenAlex、ClinicalTrials 等文献直连检索工具。
+证据审查、文献阅读、分析规划和稿件检查可以用用户提供的材料开展。联网检索用当前 Agent 可访问的学术来源；Antigravity 用户也可以按需选用 `chemistry` 或 `scientific-literature` 插件。Zotero 写入、Origin 自动化、实际量化计算和 PPTX 渲染各有工具与运行环境要求。执行前核对所需能力，交付时说明实际做过的验证。
 
 ---
 
 ## 四、包含的 27 个科研技能一览
 
-> **使用小技巧**：平时不需要背技能名，直接用自然语言提需求即可（Antigravity 会自动匹配调用对应技能）；如果想明确指定，也可以直接说出技能名。
+> 可直接描述任务。要确认走哪个流程时，明确指定技能名或提供它的 `SKILL.md`。
 
 ### 1. 证据核查、选题打磨与文献管理
 - `chemistry-evidence-review`：审查化学与材料中的物相、结构、性能、动力学或机理论断，界定证据边界、列出竞争解释并设计下一项判别验证（附[证据核查模板](skills/chemistry-evidence-review/references/evidence-checklist.md)）
@@ -94,12 +67,10 @@ git clone https://github.com/qiransy/chem-materials-research-kit.git "$env:USERP
 
 ## 五、通用科研原则（`rules/AGENTS.md`）
 
-本插件附带了一套简洁、无个人信息的通用科研原则，启用插件后会自动约束助手：
+使用本仓库作为工作区时，根目录 `AGENTS.md` 指向共用科研原则。安装到其他课题时，可按客户端的指令格式把 [`rules/AGENTS.md`](rules/AGENTS.md) 合并到项目规则，或者在任务中明确引用：
 - 严格区分**事实、推论与猜想**，不编造文献、DOI 或实验数据；
 - 保留单位、误差棒、测试条件与计算级别；
 - 先核验前提与隐藏变量，修改代码和文稿时坚持最小改动原则。
-
-如果你更希望完全使用自己的全局规则，直接删掉插件内的 `rules/` 文件夹即可，不会影响 27 个技能的正常使用。
 
 ---
 

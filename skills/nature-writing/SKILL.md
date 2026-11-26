@@ -43,14 +43,14 @@ Do **not** read every fragment in `static/`. Load only what step 2 selected.
 
 Apply the loaded fragments in this priority order:
 
-1. Core stance + intake (`core/stance.md`) — surface missing claim / evidence / boundary before drafting.
+1. Core stance + intake (`static/core/stance.md`) — surface missing claim / evidence / boundary before drafting.
 2. Paper-type playbook — argument chain, drafting order.
 3. Section-specific drafting rules and structure.
 4. Task-specific submission rules when `task=submission-package`.
 5. Journal-specific framing and constraints.
 6. Language-specific sentence and paragraph rules (apply last).
 
-For `task=manuscript`, use `core/workflow.md` at the requested scale. Plan the argument for a new section or substantial restructuring; a title, single paragraph, or local follow-up needs only the applicable evidence, wording, and consistency checks. Complete the requested prose unless a material unresolved decision blocks it or the user requested an outline for approval first.
+For `task=manuscript`, use `static/core/workflow.md` at the requested scale. Plan the argument for a new section or substantial restructuring; a title, single paragraph, or local follow-up needs only the applicable evidence, wording, and consistency checks. Complete the requested prose unless a material unresolved decision blocks it or the user requested an outline for approval first.
 
 When drafting or restructuring Results, or compressing a full manuscript's main
 text, also load `../nature-shared/core/main-text-discipline.md` before building

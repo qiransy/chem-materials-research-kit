@@ -75,7 +75,7 @@ Use `low` for cosmetic issues that do not affect comprehension:
 
 ## Supplementary structural PPTX audit
 
-Use the installed `Presentations` skill for PPTX authoring, rendered review, and package finalization. When useful, run this backend-independent script to inspect PPTX XML after the first draft and after revision:
+Use the selected authoring tool for PPTX creation, rendered review, and package finalization. When useful, run this backend-independent script to inspect PPTX XML after the first draft and after revision:
 
 Resolve the bundled script relative to the directory containing this skill's `SKILL.md`; the sample path below is illustrative. Use the active shell's normal quoting and path syntax.
 
@@ -115,14 +115,14 @@ These checks cannot prove visual perfection, but they reliably catch many failur
 
 ## Rendered preview policy
 
-Use the rendered-slide review provided by the installed `Presentations` workflow. Inspect available previews for missing images; distortion or low resolution; unreadable panels; text overflow; overlaps; excessive density; wrong order; missing source labels; and missing or unhelpful speaker notes. Do not require a separate headless renderer when `Presentations` already provides previews.
+Use the rendered-slide review provided by the selected workflow. Inspect available previews for missing images; distortion or low resolution; unreadable panels; text overflow; overlaps; excessive density; wrong order; missing source labels; and missing or unhelpful speaker notes. Use the existing preview path when it covers the review.
 
 If rendered preview reveals defects, revise and regenerate the PPTX. Do not deliver a deck with obvious visual defects merely because the package validates.
 
-If no rendered preview is available through `Presentations`, complete structural and text checks that the available tools support, and state clearly in the requested QA note that visual inspection was not completed.
+If no rendered preview is available, complete structural and text checks that the available tools support and record the verification scope.
 
 ## Step 9 — final verification
 
-After revision, complete the active `Presentations` finalization workflow; check slide count, embedded media, and planned speaker notes where supported. The local `audit_pptx_quality.py` and extracted-asset contact sheets are supplementary checks, not substitutes for rendered-slide inspection.
+After revision, complete the selected backend's finalization workflow and check slide count, embedded media, and planned speaker notes where supported. Use `audit_pptx_quality.py` for structural checks and inspect rendered slides where available.
 
 Do not stop at "PPTX opens" if the self-review found high-severity issues. Correct them first, then verify again. Document any remaining limitation in `output/qa_report.md`.
