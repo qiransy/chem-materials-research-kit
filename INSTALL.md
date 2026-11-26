@@ -1,6 +1,6 @@
-# 跨 Agent 安装
+# 在 Codex 和 Antigravity 安装
 
-仓库的 [`skills/`](skills/) 是 27 个 Skill 的共用来源。支持 [Agent Skills](https://agentskills.io/specification) 的客户端可按项目目录发现技能。网页聊天或仅能读取附件的助手可使用[文档模式](docs/use-in-chat.md)。同一项目使用同一发现目录的客户端可以共用一份安装。
+仓库的 [`skills/`](skills/) 是 27 个 Skill 的共用来源。本页说明两款客户端的项目级安装。其他 Agent 的兼容性待实测。
 
 ## 1. 获取仓库
 
@@ -10,45 +10,45 @@
 git clone https://github.com/qiransy/chem-materials-research-kit.git
 ```
 
-## 2. 选择项目和客户端
+## 2. 把 Skill 装到课题目录
 
-在解压后的工具包目录运行。安装器用 Python 3.9+ 标准库，Windows 可按本机环境将 `python` 改为 `py`，macOS/Linux 可用 `python3`。将示例中的项目路径改为已存在的课题目录。
+在解压后的工具包目录运行下列任一命令。把 `<课题目录>` 换成已存在的项目路径。安装器需要 Python 3.9 或更高版本。Windows 可用 `py`，macOS/Linux 可用 `python3`。
 
 ```text
-python scripts/install_skills.py agents --project "/path/to/project" --skill chemistry-evidence-review
-python scripts/install_skills.py claude --project "/path/to/project" --skill nature-writing
-python scripts/install_skills.py copilot --project "/path/to/project" --dry-run
+python scripts/install_skills.py codex --project "<课题目录>" --skill chemistry-evidence-review
+python scripts/install_skills.py antigravity --project "<课题目录>" --skill chemistry-evidence-review
 ```
 
-不传 `--skill` 会安装全部 27 个目录。用 `--list` 查看名称，重复传 `--skill` 可选择多个，脚本会带上已登记的共享与引用依赖。安装时保留文件夹内的脚本、样例、参考与模板。内容相符的现有安装会复用，有差异的同名目录会报告冲突。安装脚本只复制到选中的项目。
+两条命令都会安装到同一个位置。同一课题同时使用 Codex 和 Antigravity 时，执行一次即可。
 
-| 客户端 | 脚本参数 | 项目内安装位置 |
-| --- | --- | --- |
-| Antigravity | `agents` 或 `antigravity` | `.agents/skills/` · [文档](https://antigravity.google/docs/skills) |
-| Codex | `agents` 或 `codex` | `.agents/skills/` · [文档](https://learn.chatgpt.com/docs/build-skills) |
-| Cursor | `agents` 或 `cursor` | `.agents/skills/` · [文档](https://cursor.com/docs/skills) |
-| Gemini CLI | `agents` 或 `gemini` | `.agents/skills/` · [文档](https://geminicli.com/docs/cli/skills/) |
-| OpenCode | `agents` 或 `opencode` | `.agents/skills/` · [文档](https://opencode.ai/docs/skills/) |
-| OpenClaw | `agents` 或 `openclaw` | `.agents/skills/`（对应 Agent 的 workspace） · [文档](https://docs.openclaw.ai/skills) |
-| Devin Local | `agents` 或 `devin` | `.agents/skills/` · [文档](https://docs.devin.ai/desktop/devin-local/customizations) |
-| Claude Code | `claude` | `.claude/skills/` · [文档](https://code.claude.com/docs/en/skills) |
-| GitHub Copilot（VS Code） | `copilot` | `.github/skills/` · [文档](https://code.visualstudio.com/docs/agent-customization/agent-skills) |
-| Kiro | `kiro` | `.kiro/skills/` · [文档](https://kiro.dev/docs/skills/) |
-| Qwen Code | `qwen` | `.qwen/skills/` · [文档](https://qwenlm.github.io/qwen-code-docs/en/users/features/skills/) |
-| Roo Code | `roo` | `.roo/skills/` · [文档](https://roocodeinc.github.io/Roo-Code/features/skills/) |
+```text
+课题目录/
+└── .agents/skills/
+    └── chemistry-evidence-review/
+        ├── SKILL.md
+        └── references/
+```
 
-其他支持 Agent Skills 的客户端可按其文档，用 `--skills-dir <项目内目录>` 指定技能目录。例如 `python scripts/install_skills.py --project "/path/to/project" --skills-dir .example/skills --skill chemistry-evidence-review`。
+省略 `--skill` 会安装全部 27 个目录。用 `--list` 查看名称，重复传 `--skill` 可选多个。安装器会带上已登记的共享资源，复用内容相符的现有安装，并提示有差异的同名目录。
 
 ### 手动复制
 
-把仓库中 `skills/` 的**子目录**放入上表位置。例如用 Codex 安装证据核查时，最终路径为 `项目/.agents/skills/chemistry-evidence-review/SKILL.md`。客户端有不同规则时，以该客户端文档中的技能位置为准。复制时保留整个技能目录，Nature 系列需要的 [`nature-shared/`](skills/nature-shared/) 等共享资源放在同一级。个别技能有可选的跨技能流程，按任务需要再安装。
+把工具包 `skills/` 下面所需的**完整子目录**复制到课题目录的 `.agents/skills/`。例如复制 `chemistry-evidence-review/` 后，应能看到 `.agents/skills/chemistry-evidence-review/SKILL.md`。Nature 系列所需的 [`nature-shared/`](skills/nature-shared/) 等共享资源放在同一级。
 
 已有 Antigravity 插件版可继续使用 [`plugin.json`](plugin.json) 和现有插件目录。同一工作区有插件版时，选择一个发现入口，避免重复技能。
 
-## 3. 验证
+## 3. 在客户端检查
 
-1. 从课题目录启动客户端并开启新对话。查看客户端的技能列表，或明确指定 `chemistry-evidence-review`。
-2. 粘贴 [XRD 案例](examples/xrd-phase-identification.md) 或 [动力学案例](examples/reaction-kinetics.md) 的输入，完成后再对照检查答案。
-3. 可将 [`rules/AGENTS.md`](rules/AGENTS.md) 的内容合并到客户端使用的项目指令。也可在对话里明确让 Agent 读取这份文件。已有项目指令时保留原文再按需合并。
+| 客户端 | 打开课题目录后 |
+| --- | --- |
+| **Codex** | 以课题目录开启新对话，从 Skill 选择器查找 `chemistry-evidence-review`。CLI 可使用 `/skills` 查看，或键入 `$` 选择。 [官方文档](https://learn.chatgpt.com/docs/build-skills) |
+| **Antigravity** | 将课题目录作为工作区打开。IDE 可在 Agent 侧栏的 **Customizations** 查看 Skills。App 和交互式 CLI 可用 `/chemistry-evidence-review` 指定。 [官方文档](https://antigravity.google/docs/skills) |
 
-安装目录依据各客户端文档。自动匹配、脚本执行、联网检索和本地应用权限由实际客户端决定。使用 Skill 内命令时，将命令中的技能路径换成当前安装目录中的真实路径。
+粘贴 [XRD 案例](examples/xrd-phase-identification.md) 或 [动力学案例](examples/reaction-kinetics.md) 的输入，再对照案例下方的检查项。可按需把 [`rules/AGENTS.md`](rules/AGENTS.md) 中的科研原则合并到已有项目指令。
+
+## 验证状态
+
+- **Windows 安装器**：已实测复制全部 27 个目录、按需安装、共享依赖和同名冲突。
+- **Codex**：使用本机 Codex 的技能列表接口，从安装后的项目实际识别了全部 27 个 Skill，项目内无识别错误。案例运行和外部工具集成待验证。
+- **Antigravity**：安装器可写入工作区的共用目录，发现路径及调用方式已按官方文档核对。客户端识别和案例运行待验证。
+- **其他 Agent**：待实测。

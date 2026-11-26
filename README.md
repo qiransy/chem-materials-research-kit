@@ -1,14 +1,14 @@
 # Chemistry & Materials Research Kit
 
-面向**化学与材料方向**科研新手和研究生的跨 Agent 科研工具包。包含 **27 个 Skill 目录**、[通用科研原则](rules/AGENTS.md) 和两份模拟案例。各客户端共用开放 [Agent Skills](https://agentskills.io/specification) 格式的 `skills/`，可按需安装。
+面向**化学与材料方向**科研新手和研究生的科研工具包。包含 **27 个 Skill 目录**、[通用科研原则](rules/AGENTS.md) 和两份模拟案例。技能使用开放 [Agent Skills](https://agentskills.io/specification) 格式。
 
 ---
 
 ## 一、选择你的使用方式
 
-- **本地客户端** · 下载仓库源码或克隆，按[跨 Agent 安装指南](INSTALL.md)选平台和项目。Antigravity、Codex、Cursor、Gemini CLI、OpenCode、OpenClaw 和 Devin Local 可共用 `.agents/skills/`。Claude Code、Copilot、Kiro、Qwen Code 和 Roo Code 有各自的目录。
-- **网页聊天或通用 Agent** · 按[文档模式](docs/use-in-chat.md)提供任务所需的 Skill、参考资料和输入。平台有自定义 Skill 入口时也可按其规则导入。
-- **Antigravity 插件** · 已安装的插件可继续通过原来的 `plugin.json` 入口启用。
+目前提供 **Codex 和 Antigravity** 的[项目级安装说明](INSTALL.md)。两者都从课题目录的 `.agents/skills/` 读取技能文件，可共用一份安装。
+
+其他 Agent 待实测。已安装的 Antigravity 插件仍可通过原有插件入口使用。
 
 ---
 

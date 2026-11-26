@@ -104,7 +104,10 @@ def install(project, skill_dir, names, dry_run):
 
 def main():
     available = {entry.parent.name for entry in SOURCE.glob("*/SKILL.md")}
-    parser = argparse.ArgumentParser(description=__doc__)
+    parser = argparse.ArgumentParser(
+        description=__doc__,
+        epilog="Codex and Antigravity are the documented targets. Other client aliases are pending client testing.",
+    )
     parser.add_argument("target", nargs="?", default="agents", choices=TARGETS)
     parser.add_argument("--project", type=Path, default=Path.cwd(),
                         help="Existing project or workspace directory (default: current directory)")
