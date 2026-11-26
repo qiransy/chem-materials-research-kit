@@ -1,0 +1,11 @@
+schema_version: 1
+cases:
+  - id: two_dimensional_heterointerface
+    system: 2d_heterointerface
+    expect: {requires_user_surface_order: true, records_strain_allocation: true}
+  - id: mof_polymer
+    system: mof_polymer_interface
+    expect: {checks_cross_parameters_or_dft_method: true, deletes_ligands_for_clash: false}
+  - id: lattice_mismatch
+    system: strained_interface
+    expect: {reports_matching_tradeoff: true, changes_approved_surface_silently: false}

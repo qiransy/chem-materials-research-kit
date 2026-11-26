@@ -1,0 +1,30 @@
+schema_version: 1
+cases:
+  - id: periodic_surface_plan
+    system: periodic_inorganic_surface
+    expect: {status_before_confirmation: WAITING_FOR_FINAL_APPROVAL, runs_calculation: false}
+  - id: no_experiment_data
+    system: user_without_experimental_data
+    expect: {marks_missing_evidence: true, fabricates_experiment: false}
+  - id: parameter_change_after_approval
+    system: magnetic_doped_material
+    change: hubbard_u
+    expect: {approval_level: EXPLICIT_APPROVAL_REQUIRED, overwrites_approved_plan: false}
+  - id: simple_optimization_request
+    prompt: 帮我用 CP2K 优化这个结构
+    expect:
+      asks_progressively_for: [calculation_goal, structure, software_version, run_location, environment, requested_files, return_files, key_parameters]
+      creates_review_before_complete: false
+      creates_calculation_files_before_complete: false
+  - id: wsl_cp2k_request
+    environment: Windows 11 + WSL Ubuntu 22.04
+    software: CP2K 2024.3 / cp2k.psmp
+    expect: {executor: bash, uses_powershell_for_cp2k: false}
+  - id: qe_input_only_on_slurm_cluster
+    environment: Linux cluster / module load qe/7.5 / Slurm
+    requested_files: [calculation.in]
+    expect: {asks_scheduler_resources: false, generates_submit_slurm: false}
+  - id: qe_submit_script_requested
+    environment: Linux cluster / module load qe/7.5 / Slurm
+    requested_files: [calculation.in, submit.slurm]
+    expect: {asks_scheduler_resources: true, generates_submit_slurm: true}

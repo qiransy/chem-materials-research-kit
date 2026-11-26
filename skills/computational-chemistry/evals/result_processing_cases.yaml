@@ -1,0 +1,14 @@
+schema_version: 1
+cases:
+  - id: processed_only_without_source
+    setup: user_uploads_only_processed_pdos
+    expect: {accepts_quantitative_claim: false, requests_exact_source_metadata: true}
+  - id: binding_reference_mismatch
+    setup: component_energy_with_different_strain
+    expect: {error_type: REFERENCE_SYSTEM_ERROR, direct_comparison: false}
+  - id: data_sign_error
+    setup: bader_sign_reversed
+    expect: {error_type: DATA_PROCESSING_ERROR, requests_recalculation: false}
+  - id: step_specific_resume
+    prompt: 我进行到第4步，不会处理
+    expect: {expands_only_step_and_dependencies: true, repeats_full_intake: false}

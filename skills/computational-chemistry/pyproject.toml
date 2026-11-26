@@ -1,0 +1,67 @@
+[tool.pytest.ini_options]
+minversion = "8.0"
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+addopts = "-ra --strict-markers --strict-config"
+markers = [
+  "unit: deterministic unit tests",
+  "integration: component integration tests",
+  "e2e: end-to-end workflow tests",
+  "browser: local browser review tests",
+  "science: scientific-rule and parameter-mapping tests",
+]
+
+[tool.coverage.run]
+branch = true
+source = ["scripts"]
+omit = [
+  "tests/*",
+  "examples/*",
+]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
+exclude_lines = [
+  "pragma: no cover",
+  "if TYPE_CHECKING:",
+  "if __name__ == .__main__.:",
+]
+
+[tool.ruff]
+target-version = "py310"
+line-length = 100
+extend-exclude = [
+  ".git",
+  ".venv",
+  "build",
+  "dist",
+  "examples",
+  "validation",
+]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "SIM"]
+ignore = ["E501"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["scripts"]
+
+[tool.mypy]
+python_version = "3.10"
+warn_unused_configs = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+no_implicit_optional = true
+check_untyped_defs = true
+disallow_untyped_defs = false
+exclude = "(^examples/|^validation/)"
+
+[[tool.mypy.overrides]]
+module = [
+  "ase.*",
+  "pymatgen.*",
+  "spglib",
+  "spglib.*",
+]
+ignore_missing_imports = true

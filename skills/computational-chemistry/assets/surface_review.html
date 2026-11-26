@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>材料表面设计审查</title>
+  <style>
+    :root { --ink:#172027; --muted:#66727b; --paper:#eef1ec; --panel:#fbfcf8; --line:#ced6cc; --green:#275d45; --green2:#3e8060; --amber:#a46316; --red:#a13232; --blue:#315f83; --shadow:0 14px 38px rgba(28,43,35,.09); }
+    *{box-sizing:border-box} body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.55 system-ui,"Microsoft YaHei",sans-serif}
+    header{padding:30px clamp(18px,4vw,54px) 24px;color:white;background:linear-gradient(120deg,#183a2c,#346e50 60%,#677d4b)}
+    h1,h2,h3{font-family:Georgia,"Songti SC",serif} h1{margin:0 0 8px;font-size:clamp(27px,4vw,42px)} header p{margin:0;max-width:960px;opacity:.86}
+    .statusbar{display:flex;flex-wrap:wrap;gap:9px;margin-top:18px}.badge{padding:5px 11px;border:1px solid rgba(255,255,255,.36);border-radius:99px;background:rgba(255,255,255,.11)}
+    main{padding:22px clamp(14px,3vw,42px) 60px}nav{display:flex;gap:8px;overflow:auto;padding-bottom:10px}nav button{flex:0 0 auto;padding:8px 13px;border:1px solid var(--line);border-radius:99px;background:var(--panel);cursor:pointer}nav button.active{color:white;background:var(--green);border-color:var(--green)}
+    .view{display:none;margin-top:12px}.view.active{display:block}.panel{margin-bottom:16px;padding:20px;border:1px solid var(--line);border-radius:16px;background:var(--panel);box-shadow:var(--shadow)}.panel h2{margin-top:0}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:12px}.model-card{padding:15px;border:1px solid var(--line);border-radius:13px;background:white}.model-card h3{margin:0 0 8px;color:var(--green)}
+    .model-card dl{display:grid;grid-template-columns:125px 1fr;gap:5px 9px;margin:0}.model-card dt{font-weight:700;color:#526159}.model-card dd{margin:0;overflow-wrap:anywhere}.preview{width:100%;max-height:230px;object-fit:contain;border:1px solid var(--line);border-radius:9px;background:#f4f5f1;margin-bottom:10px}
+    .notice{padding:12px 14px;border-left:4px solid var(--green);background:#e0eee6;margin-bottom:14px}.danger{border-color:var(--red);background:#f7e2e2}.warning{border-color:var(--amber);background:#f7ead8}
+    table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:9px;border:1px solid var(--line);vertical-align:top;text-align:left}th{position:sticky;top:0;background:#e4e9e2}.table-wrap{max-height:70vh;overflow:auto}
+    textarea,input,select{width:100%;padding:10px;border:1px solid #adb8ac;border-radius:9px;background:white;color:var(--ink);font:inherit}textarea{min-height:110px;resize:vertical}#designEditor{min-height:64vh;font:13px/1.45 ui-monospace,Consolas,monospace}label{display:block;margin:12px 0 5px;font-weight:700}
+    .actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:14px}.actions button{padding:10px 14px;border:0;border-radius:9px;background:var(--green);color:white;font-weight:700;cursor:pointer}.actions .secondary{background:#5a6770}.actions .warn{background:var(--amber)}.actions .reject{background:var(--red)}.actions button:disabled{opacity:.4;cursor:not-allowed}
+    .bar-row{display:grid;grid-template-columns:minmax(150px,260px) 1fr 65px;gap:10px;align-items:center;margin:9px 0}.bar{height:13px;border-radius:99px;background:#e2e6df;overflow:hidden}.bar span{display:block;height:100%;background:var(--green2)}.bar.work span{background:var(--amber)}
+    pre{padding:12px;border-radius:10px;background:#e9ede7;white-space:pre-wrap;overflow-wrap:anywhere}.small{color:var(--muted);font-size:13px}.LOW{color:#267148}.MEDIUM{color:#956100}.HIGH,.CRITICAL{color:var(--red);font-weight:700}
+    @media(max-width:700px){.panel{padding:14px}.model-card dl{grid-template-columns:1fr}.model-card dt{margin-top:5px}th,td{min-width:135px}}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>材料表面设计与模型确认</h1>
+    <p>第二阶段第一步：核对实验约束、比较候选表面、修改设计并批准不可变基线。本页面不会启动正式表面优化、吸附、电子结构、成键或反应计算。</p>
+    <div class="statusbar"><span class="badge" id="statusBadge">状态：加载中</span><span class="badge" id="versionBadge">版本：—</span><span class="badge" id="riskBadge">风险：—</span><span class="badge" id="accessBadge">后续步骤：锁定</span></div>
+  </header>
+  <main>
+    <nav id="tabs">
+      <button class="active" data-view="goal">第一阶段目标</button>
+      <button data-view="input">用户输入</button>
+      <button data-view="bulk">体相校验</button>
+      <button data-view="models">候选模型</button>
+      <button data-view="edit">模型编辑</button>
+      <button data-view="history">版本历史</button>
+      <button data-view="diff">前后差异</button>
+      <button data-view="weights">权重变化</button>
+      <button data-view="impact">下游影响</button>
+      <button data-view="risks">风险提示</button>
+    </nav>
+    <section id="goal" class="view active"><div id="goalContent"></div></section>
+    <section id="input" class="view"><div id="inputContent"></div></section>
+    <section id="bulk" class="view"><div id="bulkContent"></div></section>
+    <section id="models" class="view"><div id="modelContent"></div></section>
+    <section id="edit" class="view">
+      <div class="panel">
+        <h2>表面设计编辑</h2>
+        <div class="notice">可修改晶面、终止、层数、真空、超胞、固定层、缺陷、掺杂、官能化、覆盖度、自旋、分类、优先级和后续用途。每次提交生成新的不可变版本。</div>
+        <label for="designEditor">当前候选设计 JSON</label><textarea id="designEditor" spellcheck="false"></textarea>
+        <div class="actions"><button id="addModel">新增候选表面模板</button><button id="formatJson" class="secondary">格式化 JSON</button></div>
+        <label for="editReason">修改理由（必填）</label><textarea id="editReason" placeholder="说明新增、删除、替换、排除、恢复或参数调整的理由。"></textarea>
+        <div class="actions"><button id="submitEdit">提交修改并分析影响</button></div>
+      </div>
+      <div class="panel">
+        <h2>审查操作</h2>
+        <label for="actionReason">操作说明</label><input id="actionReason" placeholder="记录接受、继续、恢复或拒绝的原因">
+        <label for="restoreVersion">恢复版本</label><select id="restoreVersion"></select>
+        <label for="confirmedBy">确认人</label><input id="confirmedBy" value="user">
+        <div class="actions"><button id="approveDesign">接受当前表面方案</button><button id="continueEdit" class="secondary">继续修改</button><button id="restoreEdit" class="warn">恢复所选版本</button><button id="rejectEdit" class="reject">拒绝当前修改</button></div>
+      </div>
+    </section>
+    <section id="history" class="view"><div id="historyContent"></div></section>
+    <section id="diff" class="view"><div id="diffContent"></div></section>
+    <section id="weights" class="view"><div id="weightContent"></div></section>
+    <section id="impact" class="view"><div id="impactContent"></div></section>
+    <section id="risks" class="view"><div id="riskContent"></div></section>
+  </main>
+  <script>
+    let state=null; const $=id=>document.getElementById(id); const el=(tag,text,cls)=>{const n=document.createElement(tag);if(text!==undefined&&text!==null)n.textContent=String(text);if(cls)n.className=cls;return n}; const compact=v=>v===null||v===undefined?"—":typeof v==="string"?v:JSON.stringify(v);
+    function panel(title){const p=el("div",null,"panel");p.append(el("h2",title));return p}
+    function table(headers,rows){const w=el("div",null,"table-wrap"),t=el("table"),h=el("thead"),tr=el("tr");headers.forEach(x=>tr.append(el("th",x)));h.append(tr);t.append(h);const b=el("tbody");rows.forEach(row=>{const r=el("tr");row.forEach(x=>r.append(el("td",compact(x))));b.append(r)});t.append(b);w.append(t);return w}
+    function activeDesign(){return state && state.design ? state.design : null}
+    function renderGoal(){const root=$("goalContent");root.replaceChildren();const p=panel("第一阶段批准目标与证据任务"),g=state.status.stage1_gate||{};p.append(el("pre",JSON.stringify({approved_version:g.approved_version,research_goal:g.research_goal,target_tasks:g.target_tasks,approved_plan_sha256:g.approved_plan_sha256},null,2)));root.append(p)}
+    function renderInput(){const root=$("inputContent");root.replaceChildren();const p=panel("用户表面方案与实验约束");if(!state.input_summary){p.append(el("div","尚未记录用户对强制前置询问的回答。不得生成正式候选表面。","notice warning"))}else{p.append(el("pre",JSON.stringify(state.input_summary,null,2)))}root.append(p)}
+    function renderBulk(){const root=$("bulkContent");root.replaceChildren();const p=panel("体相结构来源与校验");const d=activeDesign();if(!d){p.append(el("p","候选设计尚未初始化。"))}else{p.append(el("pre",JSON.stringify(d.bulk_reference||{},null,2)))}root.append(p)}
+    function preview(model){if(!model.preview_file)return null;const img=el("img",null,"preview");const raw=String(model.preview_file).replace(/\\/g,"/");img.src=raw.startsWith("previews/")?`/${raw}`:raw;img.alt=`${model.name||model.id} preview`;return img}
+    function renderModels(){const root=$("modelContent");root.replaceChildren();const p=panel("候选表面并列比较");const d=activeDesign();if(!d){p.append(el("p","尚无候选模型。"));root.append(p);return}const grid=el("div",null,"grid");(d.models||[]).forEach(m=>{const c=el("article",null,"model-card"),img=preview(m);if(img)c.append(img);c.append(el("h3",`${m.id} · ${m.name}`));const dl=el("dl");[["晶面",m.miller_index],["终止",m.termination],["分类",m.classification],["层数/厚度",`${compact(m.slab_layers)} / ${compact(m.slab_thickness)}`],["真空",m.vacuum],["超胞",m.in_plane_supercell],["固定/弛豫层",`${compact(m.fixed_layers)} / ${compact(m.relaxed_layers)}`],["缺陷",m.defect],["掺杂",m.doping],["官能化",m.functionalization],["自旋",m.spin_setting],["目标位点",m.target_sites],["实验依据",m.experimental_support],["证据功能",m.evidence_function],["后续用途",m.downstream_uses],["保留/排除理由",m.classification==="rejected"?m.rejection_reason:m.retention_reason],["科学/工作权重",`${(m.scientific_weight||{}).value??"—"} / ${(m.workload_weight||{}).value??"—"}`],["结构文件",m.structure_files]].forEach(([k,v])=>{dl.append(el("dt",k),el("dd",compact(v)))});c.append(dl);grid.append(c)});p.append(grid);root.append(p)}
+    function renderHistory(){const root=$("historyContent");root.replaceChildren();const p=panel("表面设计版本历史");p.append(table(["时间","事件","版本","前一版本","原因","状态"],(state.change_log||[]).map(x=>[x.timestamp,x.event,x.version||x.new_version,x.previous_version||x.source_version,x.reason,`${x.status_before||"—"} → ${x.status_after||"—"}`])));root.append(p);const select=$("restoreVersion");select.replaceChildren();(state.versions||[]).forEach(v=>{const o=el("option",v);o.value=v;select.append(o)})}
+    function renderDiff(){const root=$("diffContent");root.replaceChildren();const p=panel("最近候选版本差异");const a=state.analysis;if(!a)p.append(el("p","初始设计尚无版本差异。"));else p.append(table(["变化","路径","修改前","修改后","理由","等级","影响","建议"],(a.changes||[]).map(x=>[x.kind,x.path,x.before,x.after,x.user_reason,x.impact_level,x.impact_reason,x.recommendation])));root.append(p)}
+    function bar(label,value,work){const r=el("div",null,"bar-row");r.append(el("span",label));const b=el("div",null,work?"bar work":"bar"),f=el("span");f.style.width=`${Math.max(0,Math.min(100,value||0))}%`;b.append(f);r.append(b,el("span",value??0));return r}
+    function renderWeights(){const root=$("weightContent");root.replaceChildren();const d=activeDesign(),p=panel("当前科学权重与工作量权重");if(d)(d.models||[]).forEach(m=>{p.append(el("h3",`${m.id} · ${m.name}`),bar("科学权重",(m.scientific_weight||{}).value,false),bar("工作量权重",(m.workload_weight||{}).value,true))});p.append(el("p","工作量权重仅表示本表面方案内的相对复杂度，不得换算为运行时间、内存或存储空间。","small"));root.append(p);if(state.analysis){const a=state.analysis,b=panel("修改前后权重变化"),old=(a.weight_changes||{}).before||{},now=(a.weight_changes||{}).after||{},ids=[...new Set([...Object.keys(old),...Object.keys(now)])].sort();b.append(table(["模型","科学前","科学后","科学Δ","工作前","工作后","工作Δ"],ids.map(id=>{const o=old[id]||{},n=now[id]||{};return[id,o.scientific||0,n.scientific||0,(n.scientific||0)-(o.scientific||0),o.workload||0,n.workload||0,(n.workload||0)-(o.workload||0)]})));root.prepend(b)}}
+    function renderImpact(){const root=$("impactContent");root.replaceChildren();const p=panel("对实验相关性与后续计算的影响"),a=state.analysis;if(!a)p.append(el("p","初始设计尚无修改影响。"));else{(a.result_impacts||[]).forEach(x=>p.append(el("p",`• ${x}`)));p.append(el("h3","最终结论影响"),el("p",a.final_conclusion_impact))}root.append(p)}
+    function renderRisks(){const root=$("riskContent");root.replaceChildren();const p=panel("结构、证据与流程风险"),a=state.analysis,s=state.status;(s.validation_errors||[]).forEach(x=>p.append(el("p",`错误：${x}`,"CRITICAL")));(s.validation_warnings||[]).forEach(x=>p.append(el("p",`警告：${x}`,"MEDIUM")));if(a)p.prepend(el("p",`总体影响：${a.overall_impact_level}`,a.overall_impact_level));const d=activeDesign();(d?.known_risks||[]).forEach(x=>p.append(el("p",`方案风险：${compact(x)}`)));p.append(el("h3","实际检测到的结构工具"),el("pre",JSON.stringify(s.detected_structure_tools||{},null,2)));p.append(el("div","未达到 SURFACE_DESIGN_APPROVED 前，后续正式表面优化、吸附、电子结构、成键和反应计算保持锁定。","notice danger"));root.append(p)}
+    function buttons(){const s=state.status.status,has=!!state.design;$("submitEdit").disabled=!has||s==="SURFACE_DESIGN_APPROVED";$("approveDesign").disabled=!has||!["WAITING_FOR_SURFACE_REVIEW","WAITING_FOR_SURFACE_APPROVAL"].includes(s);$("continueEdit").disabled=!has||s==="SURFACE_DESIGN_APPROVED";$("restoreEdit").disabled=!has||s==="SURFACE_DESIGN_APPROVED";$("rejectEdit").disabled=s!=="WAITING_FOR_SURFACE_APPROVAL"}
+    async function load(){const r=await fetch("/api/state",{cache:"no-store"}),d=await r.json();if(!r.ok)throw new Error(d.error||"加载失败");state=d;$("statusBadge").textContent=`状态：${d.status.status}`;$("versionBadge").textContent=`版本：${d.status.current_candidate_version||"—"}`;$("riskBadge").textContent=`风险：${(d.analysis||{}).overall_impact_level||"—"}`;$("accessBadge").textContent=`后续步骤：${d.status.next_step_access?"允许读取批准基线":"锁定"}`;$("designEditor").value=d.design?JSON.stringify(d.design,null,2):"";renderGoal();renderInput();renderBulk();renderModels();renderHistory();renderDiff();renderWeights();renderImpact();renderRisks();buttons()}
+    async function post(url,payload){const r=await fetch(url,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)}),d=await r.json();if(!r.ok||!d.ok)throw new Error(d.error||"操作失败");await load();return d}
+    async function submit(){let design;try{design=JSON.parse($("designEditor").value)}catch(e){alert(`JSON 格式错误：${e.message}`);return}const reason=$("editReason").value.trim();if(!reason){alert("请填写修改理由。");return}try{await post("/api/submit",{design,reason});alert("新版本及影响分析已生成。") }catch(e){alert(e.message)}}
+    async function action(name){const payload={action:name,reason:$("actionReason").value.trim(),version:$("restoreVersion").value,confirmed_by:$("confirmedBy").value.trim()||"user"};if(name==="accept"&&!confirm("确认将当前表面设计设为不可变批准基线？此操作不会启动后续计算。"))return;try{await post("/api/action",payload);alert("操作已完成。") }catch(e){alert(e.message)}}
+    $("tabs").addEventListener("click",e=>{if(e.target.tagName!=="BUTTON")return;document.querySelectorAll("nav button").forEach(x=>x.classList.remove("active"));document.querySelectorAll(".view").forEach(x=>x.classList.remove("active"));e.target.classList.add("active");$(e.target.dataset.view).classList.add("active")});
+    $("formatJson").onclick=()=>{try{$("designEditor").value=JSON.stringify(JSON.parse($("designEditor").value),null,2)}catch(e){alert(e.message)}};
+    $("addModel").onclick=()=>{try{const d=JSON.parse($("designEditor").value);d.models=d.models||[];d.models.push({id:`SURF-${String(d.models.length+1).padStart(3,"0")}`,name:"material_facet_termination_cell_layers_vacuum_state_v001",material:"",miller_index:[0,0,1],termination:"",stoichiometry:{status:"pending"},polarity:{status:"pending"},dipole_handling:{status:"pending"},slab_layers:0,slab_thickness:{value:0,unit:"angstrom"},thickness_test:{status:"pending"},vacuum:{value:0,unit:"angstrom",status:"pending"},in_plane_supercell:{matrix:[[1,0],[0,1]],status:"pending"},fixed_layers:{status:"pending"},relaxed_layers:{status:"pending"},defect:{status:"not_applicable"},doping:{status:"not_applicable"},functionalization:{status:"not_applicable"},spin_setting:{status:"pending"},target_sites:[],experimental_support:[],evidence_function:"",comparison_group:"",downstream_uses:[],classification:"screening",retention_reason:"",rejection_reason:"",structure_files:[],preview_file:"",generation_record:{script_path:"",script_sha256:"",library:"",library_version:"",parameters:{},manual_edits:[],reproducible:false},reasonability_checks:{atom_overlap:{status:"pending"},short_bonds:{status:"pending"},intact_fragments:{status:"pending"},coordination:{status:"pending"},net_charge:{status:"pending"},stoichiometry:{status:"pending"},polarity:{status:"pending"},periodic_images:{status:"pending"},vacuum:{status:"pending"},bulk_like_center:{status:"pending"},constraints:{status:"pending"},spin:{status:"pending"}},screening:{status:"pending"},scientific_weight:{E:0,R:0,U:0,S:0,N:0,rationale:{E:"待评估",R:"待评估",U:"待评估",S:"待评估",N:"待评估"}},workload_weight:{A:0,C:0,K:0,D:0,S:0,H:0,rationale:{A:"待评估",C:"待评估",K:"待评估",D:"待评估",S:"待评估",H:"待评估"}},status:"PROPOSED",user_notes:""});$("designEditor").value=JSON.stringify(d,null,2)}catch(e){alert(e.message)}};
+    $("submitEdit").onclick=submit;$("approveDesign").onclick=()=>action("accept");$("continueEdit").onclick=()=>action("continue");$("restoreEdit").onclick=()=>action("restore");$("rejectEdit").onclick=()=>action("reject");load().catch(e=>alert(`无法加载表面审查数据：${e.message}`));
+  </script>
+</body>
+</html>

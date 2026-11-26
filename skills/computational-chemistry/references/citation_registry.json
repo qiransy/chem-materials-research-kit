@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "template_only": true,
+  "entries": [],
+  "required_fields": [
+    "citation_id",
+    "type",
+    "software_or_method",
+    "actual_version",
+    "actual_module",
+    "source_url_or_doi",
+    "verified_against_official_source",
+    "used_by_calculation_ids",
+    "sharing_or_license_note",
+    "status"
+  ]
+}

@@ -1,0 +1,85 @@
+schema_version: 1
+policy:
+  version_sensitive: true
+  require_official_verification_before_formal_use: true
+  capability_similarity_does_not_imply_parameter_or_result_equivalence: true
+  unknown_value: UNVERIFIED
+software:
+  - name: Quantum ESPRESSO
+    version_range: UNVERIFIED
+    open_source_status: open_source
+    license_type: VERIFY_CURRENT_RELEASE_TERMS
+    applicable_systems: [periodic_solids, surfaces, interfaces]
+    calculation_types: [periodic_dft, geometry_optimization, scf, bands, dos, pdos]
+    primary_inputs: [text_input, structure, pseudopotentials]
+    primary_outputs: [main_output, final_coordinates, restart_data]
+    postprocessing: [bundled_postprocessing, external_charge_and_bonding_tools]
+    unsuitable_without_approved_approximation: [isolated_molecular_wavefunction_workflow]
+    alternatives: [CP2K]
+    mapping_limit: pseudopotentials, cutoffs, grids, occupations, and convergence controls are implementation-specific
+    official_citation_requirement: verify for the actual version and modules
+  - name: CP2K
+    version_range: UNVERIFIED
+    open_source_status: open_source
+    license_type: VERIFY_CURRENT_RELEASE_TERMS
+    applicable_systems: [periodic_solids, surfaces, interfaces, molecules]
+    calculation_types: [dft, geometry_optimization, molecular_dynamics, scf, dos]
+    primary_inputs: [text_input, coordinates, basis_sets, potentials]
+    primary_outputs: [main_output, final_coordinates, trajectories, restart_files]
+    postprocessing: [bundled_outputs, external_charge_and_bonding_tools]
+    unsuitable_without_approved_approximation: []
+    alternatives: [Quantum ESPRESSO]
+    mapping_limit: mixed Gaussian/plane-wave settings do not map one-to-one to plane-wave-only settings
+    official_citation_requirement: verify for the actual version and methods
+  - name: Gaussian
+    version_range: UNVERIFIED
+    open_source_status: non_open
+    license_type: VERIFY_CURRENT_LICENSE
+    applicable_systems: [molecules, finite_clusters]
+    calculation_types: [molecular_dft, wavefunction_methods, optimization, frequencies, population_analysis]
+    primary_inputs: [gjf_or_com, checkpoint_dependencies]
+    primary_outputs: [log_or_out, chk_or_fchk, final_structure]
+    postprocessing: [checkpoint_tools, external_wavefunction_analysis]
+    unsuitable_without_approved_approximation: [fully_periodic_slab_or_interface]
+    alternatives: [ORCA, CP2K]
+    mapping_limit: basis, integration grids, dispersion, SCF defaults, and population definitions require explicit mapping
+    official_citation_requirement: verify release citation and licensed sharing terms
+  - name: ORCA
+    version_range: UNVERIFIED
+    open_source_status: non_open
+    license_type: VERIFY_CURRENT_LICENSE
+    applicable_systems: [molecules, finite_clusters]
+    calculation_types: [molecular_dft, wavefunction_methods, optimization, frequencies, bonding_analysis]
+    primary_inputs: [text_input, coordinates, basis_dependencies]
+    primary_outputs: [out, xyz, gbw, optional_hessian_or_gradient]
+    postprocessing: [bundled_tools, external_wavefunction_analysis]
+    unsuitable_without_approved_approximation: [fully_periodic_slab_or_interface]
+    alternatives: [CP2K]
+    mapping_limit: basis, auxiliaries, grids, approximations, and default thresholds are not automatically equivalent
+    official_citation_requirement: verify actual version, modules, and license terms
+  - name: GROMACS
+    version_range: UNVERIFIED
+    open_source_status: open_source
+    license_type: VERIFY_CURRENT_RELEASE_TERMS
+    applicable_systems: [classical_molecular_systems, interfaces_with_validated_force_fields]
+    calculation_types: [energy_minimization, molecular_dynamics, trajectory_analysis]
+    primary_inputs: [gro, topology, mdp, index_or_restraints]
+    primary_outputs: [gro, edr, log, trajectory, checkpoint]
+    postprocessing: [bundled_analysis_tools]
+    unsuitable_without_approved_approximation: [electronic_structure, systems_missing_cross_force_field_parameters]
+    alternatives: [LAMMPS]
+    mapping_limit: force fields, mixing rules, constraints, thermostats, and long-range methods require explicit validation
+    official_citation_requirement: verify version and algorithms used
+  - name: LOBSTER
+    version_range: UNVERIFIED
+    open_source_status: non_open_or_restricted
+    license_type: VERIFY_CURRENT_LICENSE
+    applicable_systems: [compatible_periodic_wavefunction_outputs]
+    calculation_types: [cohp, coop, projected_bonding_analysis]
+    primary_inputs: [lobsterin, compatible_wavefunction_or_projection_files]
+    primary_outputs: [cohp_data, icohp_data, projection_quality_records]
+    postprocessing: [external_plotting_or_table_tools]
+    unsuitable_without_approved_approximation: [geometry_optimization, standalone_scf]
+    alternatives: [program_specific_bonding_analysis]
+    mapping_limit: compatibility, basis projections, spilling, and target-pair definitions must be checked
+    official_citation_requirement: verify current program and method citations

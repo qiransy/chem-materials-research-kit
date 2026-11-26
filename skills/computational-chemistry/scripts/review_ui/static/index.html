@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>计算化学工作流审查</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <main class="review-shell">
+    <header>
+      <p class="eyebrow">LOCAL REVIEW GATE</p>
+      <h1 id="review-title">正在读取审查请求…</h1>
+      <p class="subtitle">审批只对下方请求编号与 SHA-256 完全匹配的内容有效。</p>
+    </header>
+
+    <section class="metadata" aria-label="审查元数据">
+      <div><span>阶段</span><strong id="stage">—</strong></div>
+      <div><span>请求编号</span><strong id="request-id">—</strong></div>
+      <div><span>文件名称</span><strong id="content-file">—</strong></div>
+      <div><span>生成时间</span><strong id="created-at">—</strong></div>
+    </section>
+
+    <section class="hash-panel">
+      <span>待审查内容 SHA-256</span>
+      <code id="content-hash">—</code>
+    </section>
+
+    <section class="content-panel">
+      <div class="section-heading">
+        <h2>完整待审查内容</h2>
+        <span id="request-status" class="badge">读取中</span>
+      </div>
+      <pre id="review-content" tabindex="0">正在载入…</pre>
+    </section>
+
+    <section class="decision-panel">
+      <label for="comment">审查意见</label>
+      <textarea id="comment" rows="5" placeholder="可填写批准说明、修改要求或拒绝原因。"></textarea>
+      <div class="actions">
+        <button type="button" class="approve" data-decision="approved">批准并继续</button>
+        <button type="button" class="revision" data-decision="revision_required">退回修改</button>
+        <button type="button" class="reject" data-decision="rejected">拒绝并终止</button>
+      </div>
+      <p id="message" class="message" role="status" aria-live="polite"></p>
+    </section>
+  </main>
+  <script src="/static/app.js" defer></script>
+</body>
+</html>

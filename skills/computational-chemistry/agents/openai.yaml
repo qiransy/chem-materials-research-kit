@@ -1,0 +1,4 @@
+interface:
+  display_name: "Computational Chemistry Skill"
+  short_description: "Control, validate, trace, and archive chemistry workflows"
+  default_prompt: "Use $computational-chemistry-skill to control, validate, trace, resume, and archive my staged computational chemistry project."

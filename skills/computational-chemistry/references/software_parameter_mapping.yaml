@@ -1,0 +1,55 @@
+schema_version: 1
+policy:
+  mapping_is_not_actual_provenance: true
+  mapping_is_not_successful_reproduction: true
+  require_user_review_for_scientifically_relevant_changes: true
+parameter_families:
+  exchange_correlation:
+    portability: conceptual_only
+    checks: [exact_variant, implementation, spin_form, relativistic_treatment]
+  pseudopotential_or_effective_core:
+    portability: not_direct
+    checks: [family, valence_configuration, relativistic_level, nonlinear_core_correction, recommended_cutoff]
+  atom_centered_basis:
+    portability: not_direct
+    checks: [contraction, polarization, diffuse_functions, auxiliary_basis, core_treatment]
+  plane_wave_cutoff:
+    portability: not_direct
+    checks: [basis_definition, density_cutoff_ratio, pseudopotential_family, convergence_test]
+  k_points:
+    portability: density_based_only
+    checks: [cell_shape, reciprocal_density, gamma_centering, symmetry, metallicity]
+  grids:
+    portability: implementation_specific
+    checks: [integration_definition, density_grid, fft_grid, numerical_quality]
+  occupations_and_smearing:
+    portability: conceptual_only
+    checks: [scheme, width_unit, entropy_correction, metallic_or_insulating_state]
+  dispersion:
+    portability: method_identity_required
+    checks: [variant, damping, parameters, periodic_implementation]
+  hubbard_u:
+    portability: not_direct
+    checks: [formalism, projector, site, orbital, U_and_J_definition, double_counting]
+  spin:
+    portability: conceptual_only
+    checks: [restricted_or_unrestricted, collinear_or_noncollinear, spin_orbit, initial_moments, multiplicity]
+  convergence:
+    portability: observable_based
+    checks: [energy_definition, force_unit, scf_residual, geometry_algorithm]
+  boundary_and_dipole:
+    portability: implementation_specific
+    checks: [periodicity, vacuum, electrostatic_correction, slab_axis, charged_cell_policy]
+task_mappings:
+  periodic_dft_between_quantum_espresso_and_cp2k:
+    status: OPEN_SOURCE_REPRODUCTION_SUGGESTION
+    transferable_concepts: [structure, charge, spin_goal, functional_identity, dispersion_identity, observable_targets]
+    non_equivalent_defaults: [basis, pseudopotentials, cutoffs, grids, scf, diagonalization, stress]
+  finite_cluster_between_gaussian_and_orca:
+    status: OPEN_SOURCE_REPRODUCTION_SUGGESTION
+    transferable_concepts: [geometry, charge, multiplicity, functional_identity, basis_intent, observable_targets]
+    non_equivalent_defaults: [integration_grid, scf, approximations, auxiliaries, dispersion_defaults, population_analysis]
+  classical_md_between_gromacs_and_lammps:
+    status: OPEN_SOURCE_REPRODUCTION_SUGGESTION
+    transferable_concepts: [topology_intent, ensemble, temperature, pressure, timestep, output_observables]
+    non_equivalent_defaults: [force_field_syntax, mixing_rules, constraints, long_range_solver, thermostat, barostat]

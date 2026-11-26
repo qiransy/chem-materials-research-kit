@@ -1,0 +1,14 @@
+schema_version: 1
+cases:
+  - id: geometry_file_delivery
+    setup: interface_files_approved
+    expect: {state: WAITING_FOR_USER_CALCULATION_RESULT, runs_or_submits: false}
+  - id: failed_scf
+    setup: returned_result_with_scf_oscillation
+    expect: {error_type: NUMERICAL_CONVERGENCE_ERROR, preserves_model: true}
+  - id: collapsed_surface
+    setup: returned_result_with_surface_collapse
+    expect: {error_type: MODEL_ERROR, route: stage_2_step_1, numerical_tuning_only: false}
+  - id: supplemental_pdos
+    setup: approved_supplemental_task
+    expect: {route: stage_2_step_3, reruns_all_prior_stages: false}

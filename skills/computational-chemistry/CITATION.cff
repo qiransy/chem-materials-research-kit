@@ -1,0 +1,25 @@
+cff-version: 1.2.0
+message: "If you use Computational Chemistry Skill in research, please cite this software using the metadata below."
+title: "Computational Chemistry Skill"
+type: software
+authors:
+  - family-names: "Shen"
+    given-names: "Jianzu"
+    email: "jianzu.shen@outlook.com"
+repository-code: "https://github.com/jianzushen/Computational-chemistry-skill"
+url: "https://github.com/jianzushen/Computational-chemistry-skill"
+version: "1.1.0"
+date-released: "2026-07-20"
+license: MIT
+abstract: >-
+  A human-in-the-loop workflow for computational chemistry and materials
+  modeling that supports progressive scientific intake, a fixed final browser
+  review, minimal calculation-file preparation, controlled PowerShell 7,
+  evidence-oriented result analysis, and manuscript drafting from actual records.
+keywords:
+  - computational chemistry
+  - quantum chemistry
+  - materials modeling
+  - scientific workflow
+  - human-in-the-loop
+  - provenance

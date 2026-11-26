@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>第三阶段数据处理与证据链审查</title>
+  <style>
+    :root{color-scheme:light;--ink:#1c2430;--muted:#637181;--line:#d6dee7;--bg:#f4f6f8;--card:#fff;--navy:#17324d;--blue:#1769e0;--green:#087443;--amber:#9a5b00;--red:#b42318}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.58 system-ui,"Microsoft YaHei",sans-serif}header{background:var(--navy);color:#fff;padding:22px 28px}header h1{margin:0 0 5px;font-size:24px}header p{margin:0;color:#d9e6f2}.badges{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.badge{padding:4px 9px;border:1px solid #ffffff3b;border-radius:999px;background:#ffffff17}main{max-width:1500px;margin:auto;padding:18px}.panel{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:14px;box-shadow:0 2px 8px #13283b0a}.panel h2,.panel h3{margin:0 0 10px}.notice{padding:12px 14px;margin:0 0 14px;border-radius:8px;border-left:4px solid var(--blue);background:#eaf2ff}.notice.ok{border-color:var(--green);background:#e8f7ef}.notice.warning{border-color:var(--amber);background:#fff5dc}.notice.danger{border-color:var(--red);background:#ffebe9}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px}.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}.tabs button{background:#e4eaf0;color:var(--ink)}.tabs button.active{background:var(--navy);color:#fff}.view{display:none}.view.active{display:block}table{width:100%;border-collapse:collapse;font-size:13px}th,td{border:1px solid var(--line);padding:7px;vertical-align:top;text-align:left;overflow-wrap:anywhere}th{background:#eef2f5}pre{white-space:pre-wrap;overflow:auto;max-height:620px;padding:10px;border:1px solid var(--line);border-radius:7px;background:#f6f8fa}label{display:block;font-weight:650;margin:9px 0 4px}input,select,textarea,button{font:inherit}input,select,textarea{width:100%;padding:8px;border:1px solid #aab8c6;border-radius:6px;background:#fff}textarea{min-height:92px}button{border:0;border-radius:6px;padding:9px 13px;background:var(--blue);color:#fff;cursor:pointer}button.secondary{background:#556575}button.warn{background:var(--amber)}button:disabled{opacity:.45;cursor:not-allowed}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.small{font-size:12px;color:var(--muted)}.strength{font-weight:700}.STRONGLY_SUPPORTED,.SUPPORTED{color:var(--green)}.PARTIALLY_SUPPORTED,.INCONCLUSIVE{color:var(--amber)}.CONTRADICTED{color:var(--red)}a{color:var(--blue)}@media(max-width:760px){main{padding:10px}header{padding:18px}}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>用户数据处理、结果分析与证据链验证</h1>
+    <p>本阶段只提供处理指导和文字/表格审查；不执行计算或正式后处理，不生成论文图、汇报图或数据可视化图。</p>
+    <div class="badges"><span class="badge" id="stateBadge">状态：加载中</span><span class="badge" id="datasetBadge">数据集：—</span><span class="badge" id="nodeBadge">证据节点：—</span><span class="badge">计算/后处理/作图：均未执行</span></div>
+  </header>
+  <main>
+    <div id="message"></div>
+    <section id="initialQuestion" class="panel" hidden><h2>请先说明当前数据状态</h2><pre id="initialText"></pre></section>
+    <nav class="tabs" id="tabs"><button class="active" data-view="overview">总览</button><button data-view="datasets">数据清单</button><button data-view="progress">处理进度</button><button data-view="guides">步骤指导</button><button data-view="checks">完整性与可比性</button><button data-view="analysis">定向分析</button><button data-view="evidence">证据链</button><button data-view="history">历史记录</button></nav>
+    <section id="overview" class="view active"></section><section id="datasets" class="view"></section><section id="progress" class="view"></section><section id="guides" class="view"></section><section id="checks" class="view"></section><section id="analysis" class="view"></section><section id="evidence" class="view"></section><section id="history" class="view"></section>
+    <section class="grid">
+      <div class="panel">
+        <h2>记录处理进度</h2>
+        <label for="progressDataset">数据集 ID</label><input id="progressDataset">
+        <label for="progressTask">正式任务 ID</label><input id="progressTask">
+        <label for="progressType">数据类型</label><select id="progressType"><option>binding_energy</option><option>adsorption_energy</option><option>charge_density_difference</option><option>bader_charge</option><option>dos_pdos</option><option>cohp</option><option>qtaim</option><option>approved_other</option></select>
+        <label for="progressMarker">用户标记</label><select id="progressMarker"><option>该数据尚未处理</option><option>正在进行第几步</option><option>处理已完成</option><option>需要步骤指导</option><option>数据存在疑问</option></select>
+        <label for="currentStep">当前步骤（1–8，可留空）</label><input id="currentStep" type="number" min="1" max="8">
+        <label for="completedSteps">已完成步骤（逗号分隔）</label><input id="completedSteps" placeholder="1,2,3">
+        <label for="reopenedSteps">发现缺口而重开的步骤（逗号分隔）</label><input id="reopenedSteps">
+        <label for="progressNotes">说明</label><textarea id="progressNotes"></textarea>
+        <div class="actions"><button id="saveProgress">保存新进度版本</button></div>
+      </div>
+      <div class="panel">
+        <h2>请求数据处理指导</h2>
+        <div class="notice">完整模式只给出八步概览；单步模式只展开该步及直接前后依赖。页面只显示指导，不执行其中任何操作。</div>
+        <label for="guideDataset">数据集 ID</label><input id="guideDataset">
+        <label for="guideTask">正式任务 ID</label><input id="guideTask">
+        <label for="guideType">数据类型</label><select id="guideType"><option>binding_energy</option><option>adsorption_energy</option><option>charge_density_difference</option><option>bader_charge</option><option>dos_pdos</option><option>cohp</option><option>qtaim</option><option>approved_other</option></select>
+        <label for="guideMode">模式</label><select id="guideMode"><option value="full">完整步骤概览</option><option value="step">展开指定步骤</option></select>
+        <label for="guideStep">步骤（单步模式必填）</label><input id="guideStep" type="number" min="1" max="8">
+        <label for="guideContext">当前困难/已完成内容</label><textarea id="guideContext"></textarea>
+        <div class="actions"><button id="requestGuide">生成新指导版本</button></div>
+      </div>
+    </section>
+    <section id="approvalPanel" class="panel" hidden>
+      <h2>用户分析确认</h2>
+      <div class="notice warning">接受当前分析只确认本版本及其证据节点。系统会根据必需节点和完成条件计算整个第三阶段是否完成；不会因按钮操作自动把所有节点设为完成。</div>
+      <label for="actionReason">确认或重新分析原因</label><textarea id="actionReason"></textarea>
+      <div class="actions"><button id="acceptAnalysis">接受当前分析</button><button id="requestReanalysis" class="warn">要求重新分析</button></div>
+    </section>
+  </main>
+  <script>
+    const $=id=>document.getElementById(id);let state=null;
+    function el(tag,text,cls){const node=document.createElement(tag);if(text!==undefined&&text!==null)node.textContent=String(text);if(cls)node.className=cls;return node}
+    function panel(title){const box=el("div",null,"panel");box.append(el("h2",title));return box}
+    function compact(value){if(value===undefined||value===null||value==="")return"—";return typeof value==="string"?value:JSON.stringify(value)}
+    function table(headers,rows){const t=el("table"),head=el("thead"),hr=el("tr");headers.forEach(x=>hr.append(el("th",x)));head.append(hr);t.append(head);const body=el("tbody");rows.forEach(row=>{const tr=el("tr");row.forEach(x=>tr.append(el("td",compact(x))));body.append(tr)});t.append(body);return t}
+    function message(text,kind="danger"){$("message").replaceChildren();if(text)$("message").append(el("div",text,`notice ${kind}`))}
+    function parseSteps(value){if(!value.trim())return[];return value.split(",").map(x=>Number(x.trim())).filter(Number.isInteger)}
+    function relativeFile(path){const normalized=String(path||"").replaceAll("\\","/"),root=String(state?.analysis_dir||"").replaceAll("\\","/").replace(/\/$/,"");if(!root||!normalized.toLowerCase().startsWith((root+"/").toLowerCase()))return null;return normalized.slice(root.length+1)}
+    function fileLink(record,label){const path=record?.path||record?.json?.path||"",relative=relativeFile(path),a=el("a",label||path||"文件");if(relative){a.href=`/files/${encodeURI(relative)}`;a.target="_blank"}else{a.removeAttribute("href");a.title="该来源位于只读上游目录"}return a}
+    function renderOverview(){const p=panel("阶段状态与边界"),s=state.status;p.append(el("div",`当前状态：${s.status}`,s.overall_stage_complete?"notice ok":"notice"),table(["源快照","正式结果状态","已接受正式任务","已验证证据节点","整个阶段完成"],[[s.source_snapshot.snapshot_version,s.source_snapshot.formal_result_status,s.source_snapshot.accepted_task_ids,s.validated_evidence_node_ids,s.overall_stage_complete]]),el("p","作图不是必需步骤或完成条件；原始输出不会未经整理就用于过度科学解释。","notice warning"));$("overview").replaceChildren(p)}
+    function renderDatasets(){const p=panel("不可变数据清单"),rows=[];(state.datasets||[]).forEach(d=>{rows.push([`${d.dataset_id} · ${d.dataset_version}`,d.task_id,d.data_type,d.data_stage,d.metadata?.parameter_name,d.metadata?.unit,d.metadata?.reference_definition,d.image_only?"仅图片：定量验收受限":""])});p.append(table(["数据集","任务","类型","阶段","参数","单位","参照","限制"],rows));(state.datasets||[]).forEach(d=>{const sub=el("div",null,"panel");sub.append(el("h3",`${d.dataset_id} 文件与键值`));(d.files||[]).forEach(f=>sub.append(fileLink(f,`${f.file_id} · ${f.role} · ${f.original_name} · ${f.sha256}`),el("br")));if(d.key_values?.length)sub.append(el("pre",JSON.stringify(d.key_values,null,2)));p.append(sub)});$("datasets").replaceChildren(p)}
+    function renderProgress(){const p=panel("每类数据的处理进度");p.append(table(["数据集","任务/类型","状态","当前步骤","已完成","重开","用户标记","说明"],(state.progress||[]).map(x=>[x.dataset_id,`${x.task_id} / ${x.data_type}`,x.progress_state,x.current_step,x.completed_steps,x.reopened_steps,x.user_marker,x.notes])));$("progress").replaceChildren(p)}
+    function renderGuides(){const p=panel("处理指导版本");(state.guides||[]).forEach(g=>{const box=el("div",null,"panel");box.append(el("h3",`${g.dataset_id} · ${g.data_type} · ${g.mode}${g.requested_step?` · 第 ${g.requested_step} 步`:""}`));g.steps.forEach(step=>box.append(el("h3",`第 ${step.step} 步：${step.title}`),el("p",step.summary),table(["目的","输入","输出","通过标准"],[[step.purpose,step.input,step.output,step.pass_standard]])));if(g.followup_invitation)box.append(el("div",g.followup_invitation,"notice ok"));p.append(box)});if(!state.guides?.length)p.append(el("p","尚未生成处理指导。"));$("guides").replaceChildren(p)}
+    function checkRows(group){return Object.entries(group||{}).map(([key,v])=>[key,v.status,v.observation,v.evidence_file_ids])}
+    function renderChecks(){const p=panel("最新完整性与可比性检查"),v=state.latest_validation;if(!v){p.append(el("p","尚未检查。"));$("checks").replaceChildren(p);return}p.append(el("div",`处理范围：${v.resolution_scope}；结果状态：${v.resulting_state}`,v.resulting_state==="DATA_COMPARABILITY_VALIDATED"?"notice ok":"notice warning"),el("h3","通用处理检查"),table(["检查项","状态","观察","来源"],checkRows(v.common_checks)),el("h3","可比性检查"),table(["轴","状态","观察","来源"],checkRows(v.comparability)),el("h3","缺失与问题"),el("pre",JSON.stringify({blocking_missing_fields:v.blocking_missing_fields,nonblocking_missing_fields:v.nonblocking_missing_fields,unresolved_checks:v.unresolved_checks,issues:v.issues,formal_return_reasons:v.formal_return_reasons},null,2)));$("checks").replaceChildren(p)}
+    function renderAnalysis(){const p=panel("最新定向结果分析"),a=state.latest_analysis;if(!a){p.append(el("p","尚未形成分析版本。"));$("analysis").replaceChildren(p);return}p.append(el("div",`分析版本：${a.analysis_version}；流程结论：${a.outcome_code}`,a.outcome_code==="CURRENT_ANALYSIS_READY_FOR_APPROVAL"?"notice ok":"notice warning"),table(["数据结论","物理含义","证据作用","相互佐证","实验对应","结论边界","下一步判断"],[[a.data_conclusion,a.physical_meaning,a.evidence_role,a.corroboration,a.experimental_correspondence,a.conclusion_boundary,a.next_step_judgment]]),el("h3","趋势与异常"),table(["趋势","异常","跨证据一致性"],[[a.trends,a.anomalies,a.cross_evidence_consistency]]),el("h3","核心结论强度"));const list=el("div");a.conclusions.forEach(c=>{const item=el("p");item.append(el("span",c.strength,`strength ${c.strength}`),document.createTextNode(` — ${c.claim}；证据：${compact(c.evidence_item_ids)}；边界：${compact(c.limitations)}`));list.append(item)});p.append(list,el("h3","完成条件"),el("pre",JSON.stringify(a.completion_checks,null,2)));$("analysis").replaceChildren(p)}
+    function renderEvidence(){const p=panel("证据链位置与结论来源");p.append(table(["节点","角色","任务","必需","正式状态","第三阶段已验证"],(state.formal_evidence_nodes||[]).map(n=>[n.id,n.role,n.task_ids,n.required,n.status,state.status.validated_evidence_node_ids.includes(String(n.id))])));const a=state.latest_analysis;if(a)p.append(el("h3","当前证据项"),table(["ID","角色","数据集","来源","观察","一致性"],a.evidence_items.map(x=>[x.evidence_id,x.evidence_role,x.dataset_id,x.source_id,x.observation,x.consistency])));$("evidence").replaceChildren(p)}
+    function renderHistory(){const p=panel("不可变来源与操作历史");p.append(el("h3","源记录"));state.status.source_snapshot.records.forEach(r=>p.append(fileLink(r,`${r.source_name} · ${r.sha256}`),el("br")));p.append(el("h3","变更日志"),table(["时间","事件","数据集/版本","状态/说明"],(state.change_log||[]).map(x=>[x.recorded_at,x.event,x.dataset_id||x.analysis_version||x.version||"",x.state||x.reason||""])));$("history").replaceChildren(p)}
+    function render(){const s=state.status;$("stateBadge").textContent=`状态：${s.status}`;$("datasetBadge").textContent=`数据集：${state.datasets.length}`;$("nodeBadge").textContent=`已验证证据节点：${s.validated_evidence_node_ids.length}/${state.required_evidence_node_ids.length}`;$("initialQuestion").hidden=!state.initial_question;$("initialText").textContent=state.initial_question||"";$("approvalPanel").hidden=s.status!=="WAITING_FOR_RESULT_APPROVAL";renderOverview();renderDatasets();renderProgress();renderGuides();renderChecks();renderAnalysis();renderEvidence();renderHistory()}
+    async function post(url,payload){message("");const response=await fetch(url,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)}),data=await response.json();if(!response.ok||!data.ok)throw new Error(data.error||"操作失败");return data}
+    async function load(){try{const response=await fetch("/api/state",{cache:"no-store"}),data=await response.json();if(!response.ok)throw new Error(data.error||"加载失败");state=data;render()}catch(error){message(error.message)}}
+    $("saveProgress").onclick=async()=>{try{await post("/api/progress",{dataset_id:$("progressDataset").value,task_id:$("progressTask").value,data_type:$("progressType").value,user_marker:$("progressMarker").value,current_step:$("currentStep").value?Number($("currentStep").value):null,completed_steps:parseSteps($("completedSteps").value),reopened_steps:parseSteps($("reopenedSteps").value),notes:$("progressNotes").value});await load();message("进度新版本已保存。","ok")}catch(error){message(error.message)}};
+    $("requestGuide").onclick=async()=>{try{await post("/api/guide",{dataset_id:$("guideDataset").value,task_id:$("guideTask").value,data_type:$("guideType").value,mode:$("guideMode").value,step:$("guideStep").value?Number($("guideStep").value):null,user_context:$("guideContext").value});await load();message("处理指导新版本已生成。","ok")}catch(error){message(error.message)}};
+    $("acceptAnalysis").onclick=async()=>{try{await post("/api/action",{action:"accept-analysis",reason:$("actionReason").value,confirmed_by:"user"});await load();message("当前分析已接受；阶段完成状态已由证据节点和完成条件计算。","ok")}catch(error){message(error.message)}};
+    $("requestReanalysis").onclick=async()=>{try{await post("/api/action",{action:"request-reanalysis",reason:$("actionReason").value,confirmed_by:"user"});await load();message("重新分析请求已记录，旧版本未被覆盖。","ok")}catch(error){message(error.message)}};
+    $("tabs").onclick=event=>{const button=event.target.closest("button[data-view]");if(!button)return;document.querySelectorAll(".tabs button").forEach(x=>x.classList.toggle("active",x===button));document.querySelectorAll(".view").forEach(x=>x.classList.toggle("active",x.id===button.dataset.view))};
+    load();
+  </script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+schema_version: 1
+cases:
+  - id: planned_actual_difference
+    setup: actual_cutoff_differs_from_plan
+    expect: {method_uses_actual: true, difference_disclosed: true}
+  - id: unknown_version
+    setup: actual_software_version_missing
+    expect: {guesses_version: false, blocks_final_approval_if_relevant: true}
+  - id: commercial_actual_open_alternative
+    setup: non_open_actual_software
+    expect: {keeps_actual_identity: true, alternative_separate: true, claims_recalculation: false}
+  - id: strength_ceiling
+    setup: partially_supported_source_conclusion
+    requested_wording: 完全证明
+    expect: {accepts_escalation: false}

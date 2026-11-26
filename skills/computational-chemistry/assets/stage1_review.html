@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>第一阶段计算方案审查</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='12' fill='%230b6b5f'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="/stage1_review.css">
+</head>
+<body>
+  <header>
+    <div class="header-copy">
+      <p class="eyebrow">COMPUTATIONAL CHEMISTRY · STAGE 1</p>
+      <h1>第一阶段计算方案审查</h1>
+      <p>用结构化表单审查和修改研究方案。页面不运行计算，也不会绕过版本、影响分析或网页审批。</p>
+    </div>
+    <div class="statusbar" aria-label="项目状态">
+      <span class="badge" id="statusBadge">状态：加载中</span>
+      <span class="badge" id="versionBadge">版本：—</span>
+      <span class="badge" id="riskBadge">风险：—</span>
+      <span class="badge" id="hashBadge">哈希：—</span>
+    </div>
+  </header>
+
+  <main>
+    <nav id="tabs" aria-label="审查页面">
+      <button data-view="current" class="active">当前方案</button>
+      <button data-view="edit">方案编辑</button>
+      <button data-view="history">版本历史</button>
+      <button data-view="diff">前后差异</button>
+      <button data-view="science">科学权重变化</button>
+      <button data-view="work">工作量变化</button>
+      <button data-view="evidence">证据链变化</button>
+      <button data-view="results">结果影响</button>
+      <button data-view="risks">风险提示</button>
+    </nav>
+
+    <section id="current" class="view active"><div id="currentContent"></div></section>
+
+    <section id="edit" class="view editor-view">
+      <div class="editor-meta panel compact-panel">
+        <div>
+          <p class="eyebrow">当前候选方案</p>
+          <h2 id="editorTitle">加载中</h2>
+        </div>
+        <dl class="meta-grid">
+          <div><dt>项目编号 <span class="field-tag protected">受保护</span></dt><dd id="metaProject">—</dd></div>
+          <div><dt>当前阶段 <span class="field-tag system">系统生成</span></dt><dd id="metaStage">—</dd></div>
+          <div><dt>当前版本 <span class="field-tag system">系统生成</span></dt><dd id="metaVersion">—</dd></div>
+          <div><dt>当前状态 <span class="field-tag system">系统生成</span></dt><dd id="metaStatus">—</dd></div>
+          <div><dt>内容哈希 <span class="field-tag system">系统生成</span></dt><dd id="metaHash" class="hash-value">—</dd></div>
+          <div><dt>更新时间 <span class="field-tag system">系统生成</span></dt><dd id="metaUpdated">—</dd></div>
+        </dl>
+      </div>
+
+      <div class="panel completeness-panel" id="completenessPanel">
+        <div class="completeness-score"><strong id="completenessValue">0%</strong><span>方案完整度</span></div>
+        <div class="completeness-track"><span id="completenessBar"></span></div>
+        <div class="completeness-columns">
+          <div><h3>已完成项目</h3><ul id="completedItems"></ul></div>
+          <div><h3>待确认项目</h3><ul id="pendingItems"></ul></div>
+          <div><h3>阻塞提交的问题</h3><ul id="blockingItems"></ul></div>
+          <div><h3>一般提醒</h3><ul id="warningItems"></ul></div>
+        </div>
+      </div>
+
+      <div class="mode-switch panel compact-panel">
+        <div class="segmented" role="tablist" aria-label="编辑模式">
+          <button id="formModeButton" class="active" role="tab" aria-selected="true">表单模式</button>
+          <button id="jsonModeButton" role="tab" aria-selected="false">高级 JSON 模式</button>
+        </div>
+        <p id="modeStatus" class="small">表单与 JSON 使用同一个内存数据对象。</p>
+      </div>
+
+      <div id="formMode" class="editor-mode">
+        <details class="panel section-card" open>
+          <summary><span>研究目标</span><span class="summary-note">明确对象、比较、问题和可验证结论</span></summary>
+          <div class="section-body">
+            <div class="field-grid two-columns">
+              <div class="field-block wide">
+                <div class="field-heading"><label for="goalResearchObject">研究对象 <span class="field-tag required">必填</span></label><button class="help-link" data-help="research_object">解释此字段</button></div>
+                <textarea id="goalResearchObject" data-path="research_goal.research_object" placeholder="填写材料、分子、晶体、表面、反应体系，以及结构来源或拟采用的结构文件。"></textarea>
+                <p class="field-help">决定后续模型构建与输入文件来源；请尽量包含结构来源。</p><p class="field-error" data-error-for="research_goal.research_object"></p>
+                <div class="assist-actions"><button data-suggest="research_object">生成填写建议</button><button data-example="research_object">查看示例</button><button data-restore="research_object">恢复原建议</button></div>
+              </div>
+              <div class="field-block wide">
+                <div class="field-heading"><label for="goalComparison">比较对象 <span class="field-tag recommended">建议填写</span></label><button class="help-link" data-help="comparison_object">解释此字段</button></div>
+                <textarea id="goalComparison" data-path="research_goal.comparison_object" placeholder="填写准备比较的结构、方法、参数、软件、模型或实验变量。"></textarea>
+                <p class="field-help">用于确定对照体系与必须保持一致的条件。</p><p class="field-error" data-error-for="research_goal.comparison_object"></p>
+                <div class="assist-actions"><button data-suggest="comparison_object">生成填写建议</button><button data-example="comparison_object">查看示例</button><button data-restore="comparison_object">恢复原建议</button></div>
+              </div>
+              <div class="field-block wide">
+                <div class="field-heading"><label for="experimentMode">已知实验现象 <span class="field-tag optional">选填</span></label><button class="help-link" data-help="experimental_phenomenon">解释此字段</button></div>
+                <select id="experimentMode">
+                  <option value="not_provided">未提供实验现象</option>
+                  <option value="provided">已有实验现象</option>
+                  <option value="not_applicable">本任务不涉及实验现象</option>
+                </select>
+                <textarea id="goalExperiment" data-path="research_goal.experimental_phenomenon" class="hidden" placeholder="描述实验趋势、条件、数据来源和不确定性。"></textarea>
+                <p class="field-help">只记录用户已提供的事实；不会自动补造实验现象。</p><p class="field-error" data-error-for="research_goal.experimental_phenomenon"></p>
+              </div>
+              <div class="field-block wide">
+                <div class="field-heading"><label for="goalCoreQuestion">核心科学问题 <span class="field-tag required">必填</span></label><button class="help-link" data-help="core_question">解释此字段</button></div>
+                <textarea id="goalCoreQuestion" class="large-input" data-path="research_goal.core_question" placeholder="明确研究变量、比较条件、判断指标和希望回答的问题。"></textarea>
+                <p class="field-help">科学问题将决定任务、证据链与结论边界。</p><p class="field-error" data-error-for="research_goal.core_question"></p>
+                <div class="assist-actions"><button data-suggest="core_question">生成填写建议</button><button data-example="core_question">查看示例</button><button data-restore="core_question">恢复原建议</button></div>
+              </div>
+              <div class="field-block wide">
+                <div class="field-heading"><label for="goalConclusion">预期获得的结论 <span class="field-tag required">必填</span></label><button class="help-link" data-help="target_conclusion">解释此字段</button></div>
+                <textarea id="goalConclusion" data-path="research_goal.target_conclusion" placeholder="填写本阶段计划检验、支持或排除的判断。"></textarea>
+                <p class="field-help warning-text">这里填写本阶段希望通过计算回答什么，不要提前填写未经计算结果支持的确定性结论。</p><p class="field-error" data-error-for="research_goal.target_conclusion"></p>
+              </div>
+              <div class="field-block wide">
+                <div class="field-heading"><label for="goalBoundaries">研究边界或不包含内容 <span class="field-tag optional">选填</span></label><button class="help-link" data-help="research_boundaries">解释此字段</button></div>
+                <textarea id="goalBoundaries" data-path="research_goal.research_boundaries" placeholder="例如：本阶段不讨论几何优化、温度效应或跨软件绝对能量比较。"></textarea>
+                <p class="field-help">旧方案没有该扩展字段时保持缺失；只有填写后才加入数据。</p><p class="field-error" data-error-for="research_goal.research_boundaries"></p>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <details class="panel section-card" open>
+          <summary><span>科学问题</span><span class="summary-note">卡片式增删、排序和依赖选择</span></summary>
+          <div class="section-body"><div id="questionCards" class="stack"></div><button id="addQuestion" class="add-button">＋ 添加科学问题</button></div>
+        </details>
+
+        <details class="panel section-card" open>
+          <summary><span>计算任务</span><span class="summary-note">软件、模块、方法、参数、输入输出与执行依赖</span></summary>
+          <div class="section-body"><div id="taskCards" class="stack"></div><button id="addTask" class="add-button">＋ 添加计算任务</button></div>
+        </details>
+
+        <details class="panel section-card">
+          <summary><span>研究体系与对照体系</span><span class="summary-note">保持模型和比较条件可追踪</span></summary>
+          <div class="section-body split-section"><div><h3>研究体系</h3><div id="systemCards" class="stack"></div><button id="addSystem" class="add-button">＋ 添加研究体系</button></div><div><h3>对照体系</h3><div id="controlCards" class="stack"></div><button id="addControl" class="add-button">＋ 添加对照体系</button></div></div>
+        </details>
+
+        <details class="panel section-card">
+          <summary><span>证据链</span><span class="summary-note">每项证据与任务、结论明确对应</span></summary>
+          <div class="section-body"><div id="evidenceCards" class="stack"></div><button id="addEvidence" class="add-button">＋ 添加证据节点</button></div>
+        </details>
+
+        <details class="panel section-card">
+          <summary><span>依赖和执行顺序</span><span class="summary-note">不要求手写内部依赖 ID</span></summary>
+          <div class="section-body"><div id="routeCards" class="stack"></div><button id="addRoute" class="add-button">＋ 添加执行步骤</button></div>
+        </details>
+
+        <details class="panel section-card">
+          <summary><span>假设、风险与备注</span><span class="summary-note">自然语言逐行填写</span></summary>
+          <div class="section-body field-grid two-columns">
+            <div class="field-block"><label for="assumptionsEditor">暂定假设 <span class="field-tag recommended">建议填写</span></label><textarea id="assumptionsEditor" placeholder="每行一项"></textarea><p class="field-error" data-error-for="assumptions"></p></div>
+            <div class="field-block"><label for="risksEditor">主要风险 <span class="field-tag recommended">建议填写</span></label><textarea id="risksEditor" placeholder="每行一项"></textarea><p class="field-error" data-error-for="risks"></p></div>
+            <div class="field-block wide"><label for="redundancyEditor">冗余与取舍说明 <span class="field-tag optional">选填</span></label><div id="redundancyEditor" class="structured-object"></div></div>
+          </div>
+        </details>
+
+        <details class="panel section-card">
+          <summary><span>受保护字段修改记录</span><span class="summary-note">通过专用对话框自动生成 manual_overrides</span></summary>
+          <div class="section-body">
+            <div class="notice">项目编号和来源记录等字段不会作为普通文本框开放。需要更正时，请使用受保护字段修改流程并填写理由。</div>
+            <div id="protectedRecords"></div>
+            <div class="actions"><button id="openProtectedDialog" class="warn">修改受保护字段</button></div>
+          </div>
+        </details>
+
+        <details class="panel section-card">
+          <summary><span>其他高级字段</span><span class="summary-note">未知扩展字段只读展示且不会丢失</span></summary>
+          <div class="section-body"><div id="unknownFields" class="unknown-fields"></div><button id="openJsonFromUnknown" class="secondary">进入高级 JSON 模式</button></div>
+        </details>
+
+        <div class="panel">
+          <label for="editReason">本次修改理由 <span class="field-tag required">正式提交必填</span></label>
+          <textarea id="editReason" placeholder="说明新增、删除、替换、合并、拆分或顺序调整的原因。保存草稿时可以暂不填写。"></textarea>
+          <p class="field-error" data-error-for="edit_reason"></p>
+        </div>
+      </div>
+
+      <div id="jsonMode" class="editor-mode hidden">
+        <div class="panel">
+          <div class="notice danger"><strong>高级 JSON 模式</strong><br>高级模式用于直接修改结构化方案数据。错误修改可能导致方案无法解析。没有 JSON 使用经验时，建议返回表单模式。系统字段、受保护字段和 manual_overrides 仍不能绕过专用修改流程。</div>
+          <div class="json-toolbar">
+            <button id="formatJson">格式化</button><button id="undoJson" class="secondary">撤销</button><button id="redoJson" class="secondary">重做</button><button id="validateJson" class="secondary">校验</button><button id="previewJson" class="secondary">保存前预览</button><button id="restoreJson" class="warn">恢复当前有效版本</button>
+          </div>
+          <div class="json-editor-shell">
+            <pre id="jsonLineNumbers" aria-hidden="true">1</pre>
+            <textarea id="planEditor" spellcheck="false" aria-label="高级 JSON 编辑器"></textarea>
+          </div>
+          <div class="json-status"><span id="jsonCursor">第 1 行，第 1 列</span><span id="jsonPath">字段路径：—</span><span id="bracketStatus">括号：—</span></div>
+          <pre id="jsonHighlight" class="json-highlight" aria-label="JSON 语法高亮预览"></pre>
+          <div id="jsonErrors" class="validation-box"></div>
+          <div class="actions"><button id="applyJson">通过校验并同步到表单</button><button id="returnForm" class="secondary">返回表单模式</button></div>
+        </div>
+      </div>
+
+      <div class="panel" id="impactActions">
+        <h2>版本与影响分析操作</h2>
+        <p class="small">这些操作沿用原工作流状态机；接受修改不等于最终批准。</p>
+        <label for="actionReason">操作说明</label><input id="actionReason" placeholder="记录接受、继续、恢复或拒绝的原因">
+        <label for="restoreVersion">恢复目标版本</label><select id="restoreVersion"></select>
+        <div class="actions"><button id="acceptEdit">接受修改并更新方案</button><button id="continueEdit" class="secondary">继续修改</button><button id="restoreEdit" class="warn">恢复所选版本</button><button id="rejectEdit" class="danger">拒绝当前修改</button><button id="approvePlan">打开网页最终审批</button></div>
+      </div>
+
+      <div class="sticky-actions" id="stickyActions">
+        <div><strong id="dirtyStatus">没有未保存修改</strong><span id="draftStatus" class="small"></span></div>
+        <div class="actions"><button id="saveDraft" class="secondary">保存草稿</button><button id="checkPlan" class="secondary">检查方案</button><button id="viewSummary" class="secondary">查看修改摘要</button><button id="submitApproval">提交审批</button></div>
+      </div>
+    </section>
+
+    <section id="history" class="view"><div id="historyContent"></div></section>
+    <section id="diff" class="view"><div id="diffContent"></div></section>
+    <section id="science" class="view"><div id="scienceContent"></div></section>
+    <section id="work" class="view"><div id="workContent"></div></section>
+    <section id="evidence" class="view"><div id="evidenceContent"></div></section>
+    <section id="results" class="view"><div id="resultsContent"></div></section>
+    <section id="risks" class="view"><div id="risksContent"></div></section>
+  </main>
+
+  <dialog id="helperDialog"><form method="dialog"><div class="dialog-heading"><h2 id="helperTitle">填写辅助</h2><button value="cancel" aria-label="关闭">×</button></div><div id="helperContent"></div><div class="actions"><button value="cancel" class="secondary">关闭</button></div></form></dialog>
+
+  <dialog id="protectedDialog"><form id="protectedForm">
+    <div class="dialog-heading"><h2>修改受保护字段</h2><button type="button" id="closeProtectedDialog" aria-label="关闭">×</button></div>
+    <div class="notice danger">该操作会自动生成可审计的 <code>manual_overrides</code> 记录，不会要求你手写技术字段。</div>
+    <label for="protectedPath">字段名称</label><select id="protectedPath"></select>
+    <label for="protectedOldValue">当前值</label><textarea id="protectedOldValue" readonly></textarea>
+    <label for="protectedNewValue">拟修改值</label><textarea id="protectedNewValue" required></textarea>
+    <label for="protectedReason">修改理由（必填）</label><textarea id="protectedReason" required></textarea>
+    <label for="protectedActor">操作者</label><input id="protectedActor" value="user">
+    <div class="impact-preview"><strong>可能影响</strong><p id="protectedImpact"></p></div>
+    <p class="field-error" id="protectedError"></p>
+    <div class="actions"><button type="submit">确认修改并记录</button><button type="button" id="cancelProtectedDialog" class="secondary">取消</button></div>
+  </form></dialog>
+
+  <dialog id="summaryDialog"><form method="dialog"><div class="dialog-heading"><h2>方案与修改摘要</h2><button value="cancel" aria-label="关闭">×</button></div><div id="summaryContent"></div><details><summary>查看技术差异</summary><div id="summaryTechnicalDiff"></div></details><div class="actions"><button value="cancel" class="secondary">关闭</button></div></form></dialog>
+
+  <div id="toast" role="status" aria-live="polite"></div>
+  <datalist id="softwareOptions"><option>Quantum ESPRESSO</option><option>CP2K</option><option>Gaussian</option><option>ORCA</option><option>GROMACS</option><option>VASP</option><option>LAMMPS</option></datalist>
+  <script src="/stage1_review.js" defer></script>
+</body>
+</html>

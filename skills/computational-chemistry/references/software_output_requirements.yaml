@@ -1,0 +1,27 @@
+schema_version: 1
+policy:
+  prefer_complete_outputs_over_screenshots: true
+  single_energy_is_insufficient_for_convergence: true
+tasks:
+  geometry_optimization:
+    required: [approved_structure, actual_input, potential_or_basis_inventory, parameter_record, constraint_record, run_script, main_output, error_log, final_structure]
+  binding_energy:
+    required: [complex_input_output, component_a_input_output, component_b_input_output, reference_definition, unit_definition, structure_parameter_comparability]
+  adsorption_energy:
+    required: [adsorbed_input_output, substrate_reference, adsorbate_reference, reference_definition, unit_and_sign_definition, comparability_record]
+  charge_density_difference:
+    required: [interface_density, component_a_density_same_cell_grid_positions, component_b_density_same_cell_grid_positions, subtraction_definition, grid_metadata]
+  bader_or_quantitative_charge:
+    required: [charge_density_source, partition_input, partition_output, atom_mapping, sign_definition, reference_or_difference_definition]
+  pdos:
+    required: [scf_input_output, nscf_input_output, pdos_postprocess_input, pdos_data, fermi_level, atom_orbital_projection_definition]
+  cohp:
+    required: [compatible_wavefunction_or_projection_files, bonding_input, target_atom_pairs, projection_quality_or_spilling, cohp_data, icohp_data]
+  qtaim:
+    required: [wavefunction_or_density_source, analysis_input, critical_point_or_basin_output, atom_mapping, method_and_threshold_record]
+program_returns:
+  Quantum_ESPRESSO: [out, final_coordinates, actual_input, scheduler_stderr, restart_information_if_needed]
+  CP2K: [main_output, final_coordinates, trajectory, restart_file, scheduler_stderr]
+  Gaussian: [log_or_out, chk_or_fchk, final_structure]
+  ORCA: [out, xyz, gbw, optional_hessian_or_gradient]
+  GROMACS: [log, gro, edr, topology, mdp, trajectory_or_checkpoint_when_relevant]

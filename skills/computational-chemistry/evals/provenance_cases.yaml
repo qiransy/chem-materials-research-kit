@@ -1,0 +1,18 @@
+schema_version: 1
+cases:
+  - id: unique_id_no_reuse
+    setup: retired_MODEL_SURFACE_001
+    expect: {next_id: MODEL-SURFACE-002}
+  - id: complete_conclusion_chain
+    setup: conclusion_evidence_result_calc_model_task_all_hashed
+    expect: {status: TRACEABILITY_COMPLETE, manuscript_eligible: true}
+  - id: missing_actual_input
+    setup: conclusion_chain_without_actual_input
+    expect: {status: TRACEABILITY_INCOMPLETE, manuscript_eligible: false}
+  - id: changed_locked_hash
+    setup: approved_source_modified_after_snapshot
+    expect: {audit_passed: false, overwrites_recorded_hash: false}
+  - id: cross_dialog_resume
+    prompt: 继续
+    setup: valid_resume_context
+    expect: {reads_state_first: true, restarts_project: false}

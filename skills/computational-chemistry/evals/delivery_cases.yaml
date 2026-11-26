@@ -1,0 +1,17 @@
+schema_version: 1
+cases:
+  - id: missing_core_trace
+    setup: manuscript_approved_but_conclusion_trace_incomplete
+    expect: {state: DELIVERY_ITEMS_MISSING, archive_allowed: false}
+  - id: reproduction_only_gap
+    setup: complete_actual_trace_without_open_source_inputs
+    expect: {severity: REPRODUCTION_LIMITATION, misattributes_actual_method: false}
+  - id: restricted_dependency
+    setup: proprietary_dependency_marked_restricted
+    expect: {copied_into_package: false, recorded_in_manifest: true}
+  - id: source_changed_after_copy
+    setup: delivery_source_hash_changed
+    expect: {state: DELIVERY_ITEMS_MISSING, overwrite_copy: false}
+  - id: archive_requires_confirmation
+    setup: delivery_package_ready_without_user_confirmation
+    expect: {state: DELIVERY_PACKAGE_READY, project_archived: false}

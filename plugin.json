@@ -1,0 +1,12 @@
+{
+  "name": "chem-materials-research-kit",
+  "displayName": "Chemistry & Materials Research Kit",
+  "version": "1.0.0",
+  "description": "Universal academic research toolkit for chemistry and materials science: literature search, Zotero management, paper deep-reading, Nature-style writing and rebuttal, citation verification, computational chemistry, Origin/Python scientific plotting, and slide authoring.",
+  "repository": "https://github.com/qiransy/chem-materials-research-kit",
+  "suggestedPrompts": [
+    "帮我精读这篇化学/材料论文并生成结构化 Paper Card",
+    "核验这批参考文献的 DOI、作者、卷期和页码是否准确",
+    "用审稿人视角帮我预审这段 Results 与 Discussion，指出论证漏洞"
+  ]
+}

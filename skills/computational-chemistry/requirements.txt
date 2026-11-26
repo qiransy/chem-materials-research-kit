@@ -1,0 +1,5 @@
+# Runtime dependencies for the local review UI and structured-data validation.
+# Python 3.10 or newer is required.
+Flask>=3.0,<4.0
+jsonschema>=4.22,<5.0
+PyYAML>=6.0,<7.0

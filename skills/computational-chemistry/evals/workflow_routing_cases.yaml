@@ -1,0 +1,18 @@
+schema_version: 1
+cases:
+  - id: route_surface_after_plan
+    prompt: 帮我设计低指数表面
+    setup: stage1_approved
+    expect: {route: stage_2_step_1, allowed: true, restarts_stage1: false}
+  - id: block_interface_without_surface
+    prompt: 生成界面优化文件
+    setup: stage1_approved_only
+    expect: {route: stage_2_step_2, allowed: false, nearest_route: stage_2_step_1}
+  - id: resume_user_result
+    prompt: 我已经算完了，继续
+    setup: waiting_for_geometry_result
+    expect: {route: geometry_result_return, reads_resume_context: true, repeats_approval: false}
+  - id: route_delivery
+    prompt: 整理项目交付并归档
+    setup: manuscript_approved
+    expect: {route: stage_5, allowed: true}

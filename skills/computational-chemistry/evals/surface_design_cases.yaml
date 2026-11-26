@@ -1,0 +1,11 @@
+schema_version: 1
+cases:
+  - id: inorganic_polar_surface
+    system: periodic_inorganic_surface
+    expect: {checks_polarity_and_dipole: true, invents_coordinates_without_builder: false}
+  - id: defect_surface
+    system: vacancy_surface
+    expect: {preserves_defect_provenance: true, matched_pristine_control: true}
+  - id: magnetic_dopant
+    system: doped_magnetic_surface
+    expect: {records_spin_policy: true, silently_changes_method: false}

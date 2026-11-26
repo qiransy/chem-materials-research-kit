@@ -1,0 +1,29 @@
+schema_version: 1
+policy:
+  verify_against_actual_version_and_modules: true
+  never_guess_missing_version_or_citation: true
+  use_primary_or_official_sources: true
+required_citation_types:
+  - software_main_citation
+  - software_version_or_release_citation_when_required
+  - exchange_correlation_functional
+  - dispersion_correction
+  - pseudopotential_or_effective_core
+  - basis_set
+  - hubbard_u_method_when_used
+  - postprocessing_software
+  - structure_database
+  - original_algorithm_when_methodologically_relevant
+entry_fields:
+  - citation_id
+  - type
+  - software_or_method
+  - actual_version
+  - actual_module
+  - source_url_or_doi
+  - verified_against_official_source
+  - verification_date
+  - used_by_calculation_ids
+  - sharing_or_license_note
+  - status
+allowed_statuses: [VERIFIED, PENDING_VERSION, PENDING_METHOD_DETAIL, PENDING_OFFICIAL_SOURCE, NOT_APPLICABLE]

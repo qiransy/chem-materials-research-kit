@@ -1,0 +1,23 @@
+schema_version: 1
+mandatory_label: OPEN_SOURCE_REPRODUCTION_SUGGESTION
+prohibited_label_without_rerun: ACTUAL_CALCULATION_METHOD
+mandatory_disclaimer_zh: "该开源方案用于提供等效复现路径，尚未用于重新生成本文结果。由于不同程序的数值实现、赝势或基组体系存在差异，复现时可能获得存在合理数值偏差的结果。"
+mappings:
+  - actual_software: Gaussian
+    task_scope: finite_molecule_or_approved_cluster_electronic_structure
+    suggested_alternatives: [ORCA, CP2K]
+    transferable: [geometry, charge, multiplicity, named_method_intent, observable_targets]
+    not_directly_equivalent: [basis_implementation, grids, scf_defaults, dispersion_defaults, population_analysis]
+    recalculation_required_for_claim: true
+  - actual_software: VASP
+    task_scope: periodic_plane_wave_electronic_structure
+    suggested_alternatives: [Quantum ESPRESSO, CP2K]
+    transferable: [structure, periodicity, named_functional_intent, k_density_intent, observable_targets]
+    not_directly_equivalent: [pseudopotentials, cutoffs, grids, occupations, convergence_defaults, projection_outputs]
+    recalculation_required_for_claim: true
+  - actual_software: proprietary_periodic_code
+    task_scope: periodic_electronic_structure
+    suggested_alternatives: [Quantum ESPRESSO, CP2K]
+    transferable: [structure, charge, spin_goal, scientific_method_intent, observables]
+    not_directly_equivalent: [all_implementation_specific_parameters_and_defaults]
+    recalculation_required_for_claim: true

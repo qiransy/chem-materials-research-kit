@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>计算化学项目总览</title>
+  <style>
+    :root{color-scheme:light;--ink:#17211c;--muted:#607068;--paper:#f3f6f3;--card:#fff;--line:#d9e2dc;--accent:#176b51;--accent2:#b76b22;--bad:#9f2d2d;--good:#276a47}
+    *{box-sizing:border-box}body{margin:0;background:linear-gradient(135deg,#edf4ef,#f8f5ed);color:var(--ink);font:15px/1.55 system-ui,"Microsoft YaHei",sans-serif}
+    header{padding:32px clamp(20px,5vw,72px) 22px;background:#163c31;color:#f5fbf7}header p{margin:.35rem 0 0;color:#cfe1d8}main{padding:24px clamp(18px,5vw,72px) 48px;max-width:1500px;margin:auto}
+    .banner{border:1px solid var(--line);background:#fffffff0;padding:14px 18px;border-radius:12px;margin-bottom:18px}.banner.bad{border-color:#e4b3b3;background:#fff5f5;color:#7c2020}.banner.good{border-color:#b9d8c7;background:#f1faf5;color:#245f42}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;box-shadow:0 8px 24px #193c2a0a}.card.wide{grid-column:span 2}h2{font-size:16px;margin:0 0 12px;color:#244b3e}h3{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:16px 0 6px}.value{font-size:21px;font-weight:700;word-break:break-word}.muted{color:var(--muted)}ul{padding-left:20px;margin:8px 0}.pill{display:inline-block;border-radius:999px;padding:4px 10px;background:#e7f1ec;color:#175d46;font:700 12px/1.5 ui-monospace,monospace;word-break:break-all}.pill.warn{background:#fff0df;color:#8b5019}.pill.bad{background:#fde8e8;color:#8c2727}
+    a{color:var(--accent);text-decoration-thickness:1px;text-underline-offset:3px}.links{display:flex;flex-wrap:wrap;gap:9px}.links a{padding:7px 10px;border:1px solid #b9d3c7;border-radius:9px;background:#f5fbf8}.empty{color:var(--muted);font-style:italic}.steps li{margin:4px 0}.steps .done{color:var(--good)}.steps .pending{color:var(--muted)}code{word-break:break-word}footer{margin-top:22px;color:var(--muted);font-size:13px}@media(max-width:700px){.card.wide{grid-column:span 1}}
+  </style>
+</head>
+<body>
+  <header>
+    <h1 id="title">计算化学项目总览</h1>
+    <p>只读状态快照 · 阶段审批仍由各阶段独立完成</p>
+  </header>
+  <main>
+    <div id="auditBanner" class="banner"></div>
+    <section class="grid">
+      <article class="card"><h2>当前阶段</h2><div id="currentState" class="value"></div><h3>当前任务</h3><div id="currentTask"></div></article>
+      <article class="card"><h2>当前版本</h2><h3>模型</h3><div id="modelVersion"></div><h3>参数</h3><div id="parameterVersion"></div><h3>结果</h3><div id="resultVersion"></div></article>
+      <article class="card wide"><h2>阶段进度</h2><ol id="stageProgress" class="steps"></ol></article>
+      <article class="card"><h2>用户下一步</h2><div id="nextAction"></div><h3>需要返回</h3><ul id="returnFiles"></ul></article>
+      <article class="card"><h2>最近记录</h2><h3>错误</h3><div id="latestError"></div><h3>审批</h3><div id="latestApproval"></div></article>
+      <article class="card"><h2>结论追踪</h2><div id="traceability"></div><h3>交付完整度</h3><div id="delivery"></div></article>
+      <article class="card wide"><h2>状态冲突</h2><ul id="conflicts"></ul></article>
+      <article class="card wide"><h2>各阶段审查页面</h2><div id="stageLinks" class="links"></div><p class="muted">这些链接仅用于进入对应审查页面，不能绕过依赖或审批。</p></article>
+    </section>
+    <footer>本页面不执行计算、提交作业、查询队列或自动获取结果。页面内容来自生成时的只读审计快照。</footer>
+  </main>
+  <script id="project-data" type="application/json">__PROJECT_DASHBOARD_JSON__</script>
+  <script>
+    (()=>{
+      const d=JSON.parse(document.getElementById('project-data').textContent);
+      const text=(id,value,fallback='未确认')=>{document.getElementById(id).textContent=(value===null||value===undefined||value==='')?fallback:String(value)};
+      const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+      const project=d.project||{},workflow=d.workflow||{},resume=d.resume||{},audit=d.audit||{};
+      text('title',project.project_name?`${project.project_name} · 项目总览`:`${project.project_id||'未编号项目'} · 项目总览`);
+      document.getElementById('currentState').innerHTML=`<span class="pill">${esc(workflow.state||'PROJECT_INITIALIZED')}</span>`;
+      text('currentTask',project.current_task||resume.current_task);
+      text('modelVersion',project.current_model_id||resume.current_model_version);
+      text('parameterVersion',project.current_parameter_version||resume.current_input_version);
+      text('resultVersion',project.current_result_id||resume.current_result_version);
+      const stages=[['PROJECT_INITIALIZED','项目初始化'],['PLANNING_APPROVED','阶段一方案'],['SURFACE_DESIGN_APPROVED','表面设计'],['INTERFACE_FILES_APPROVED','界面与优化文件'],['FORMAL_CALCULATION_FILES_APPROVED','正式计算文件'],['RESULTS_APPROVED','结果分析'],['MANUSCRIPT_CONTENT_APPROVED','论文内容'],['DELIVERY_PACKAGE_READY','交付包'],['PROJECT_ARCHIVED','项目归档']];
+      const order=['PROJECT_INITIALIZED','PLANNING_IN_PROGRESS','PLANNING_APPROVED','SURFACE_DESIGN_IN_PROGRESS','SURFACE_DESIGN_APPROVED','INTERFACE_DESIGN_IN_PROGRESS','INTERFACE_FILES_APPROVED','WAITING_FOR_USER_CALCULATION','USER_CALCULATION_RESULT_RECEIVED','FORMAL_CALCULATION_FILES_IN_PROGRESS','FORMAL_CALCULATION_FILES_APPROVED','DATA_PROCESSING_IN_PROGRESS','RESULT_ANALYSIS_IN_PROGRESS','RESULTS_APPROVED','MANUSCRIPT_GENERATION_IN_PROGRESS','MANUSCRIPT_CONTENT_APPROVED','DELIVERY_VALIDATION_IN_PROGRESS','DELIVERY_ITEMS_MISSING','DELIVERY_USER_REVIEW_REQUIRED','DELIVERY_PACKAGE_READY','PROJECT_ARCHIVED'];
+      const rank=Math.max(0,order.indexOf(workflow.state));
+      document.getElementById('stageProgress').innerHTML=stages.map(([state,label])=>{const done=rank>=order.indexOf(state);return `<li class="${done?'done':'pending'}">${done?'✓':'○'} ${esc(label)} <code>${esc(state)}</code></li>`}).join('');
+      text('nextAction',resume.next_user_action||'请按恢复上下文确认下一操作。');
+      const files=resume.required_return_files||[];document.getElementById('returnFiles').innerHTML=files.length?files.map(x=>`<li>${esc(x)}</li>`).join(''):'<li class="empty">当前未指定</li>';
+      const err=d.latest_error;document.getElementById('latestError').innerHTML=err?`<span class="pill bad">${esc(err.error_type)}</span><br>${esc(err.summary)}`:'<span class="empty">无记录</span>';
+      const approval=d.latest_approval;document.getElementById('latestApproval').innerHTML=approval?`<span class="pill">${esc(approval.subject)}</span><br>${esc(approval.actor)} · ${esc(approval.timestamp)}`:'<span class="empty">无记录</span>';
+      const tr=d.traceability||{};document.getElementById('traceability').innerHTML=`完整 <strong>${Number(tr.complete||0)}</strong> · 不完整 <strong>${Number(tr.incomplete||0)}</strong>`;
+      const delivery=d.delivery||{};document.getElementById('delivery').innerHTML=delivery.state?`<span class="pill ${delivery.blocking_missing_items?.length?'warn':''}">${esc(delivery.state)}</span><br>登记 ${Number(delivery.file_count||0)} 项`:'<span class="empty">尚未开始</span>';
+      const conflicts=audit.conflicts||[];document.getElementById('conflicts').innerHTML=conflicts.length?conflicts.map(x=>`<li><span class="pill bad">${esc(x.type)}</span> ${esc(x.stage||x.path||x.state||'')}</li>`).join(''):'<li class="empty">当前快照未记录冲突</li>';
+      const banner=document.getElementById('auditBanner');if(audit.audit_passed===false){banner.className='banner bad';banner.textContent=`审计未通过：发现 ${conflicts.length} 项冲突。后续阶段应暂停，先核对状态与锁定来源。`}else{banner.className='banner good';banner.textContent=audit.audit_passed===true?'审计通过：全局状态、局部状态与锁定来源一致。':'尚未生成最新审计；执行阶段操作前应先审计。'}
+      const links=d.stage_links||[];document.getElementById('stageLinks').innerHTML=links.length?links.map(x=>`<a href="${esc(x.href)}">${esc(x.label)}</a>`).join(''):'<span class="empty">当前没有可用的阶段审查页面</span>';
+    })();
+  </script>
+</body>
+</html>
